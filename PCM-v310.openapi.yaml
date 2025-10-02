@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: PCM-OpenApi
+  title: Default module
   description: ''
   version: 1.0.0
 tags:
@@ -46,663 +46,7 @@ paths:
               maxItems: 5000
               items:
                 oneOf:
-                  - type: object
-                    properties:
-                      fapiInteractionId:
-                        description: >-
-                          UUID que identifica uma transação específica entre
-                          dois participantes. Esse dado pode ser encontrado no
-                          header x-fapi-interaction-id informado pelo Client e
-                          devolvido pelo Server. Mais informações em [Cabeçalhos
-                          HTTP](https://openbanking-brasil.github.io/areadesenvolvedor/#cabecalhos-http)
-                          na documentação do Open Finance Brasil. O envio dessa
-                          informação é obrigatório, exceto nos casos ontem ela
-                          não esteja disponível como, por exemplo, em respostas
-                          com status 5xx, ou em chamadas que terminaram por
-                          timeout onde o reporte tem que ser enviado, mas sem
-                          esse atributo. Nos demais cenários, o envio é
-                          obrigatório.
-                        type: string
-                        format: uuid
-                        maxLength: 36
-                        pattern: >-
-                          ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-                        example: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                      endpoint:
-                        type: string
-                        description: >-
-                          Identificação do endpoint que foi utilizado na
-                          transação reportada. A identificação do endpoint deve
-                          estar entre as entradas desse enum para ser
-                          considerado válido. Nesse campo não deve ser utilizado
-                          o path da requisição original, uma vez que ao comparar
-                          com os valores dessa enum, ele não será considerado
-                          válido.
-                        format: uri
-                        example: /open-banking/consents/v2/consents
-                      statusCode:
-                        description: >-
-                          Status de retorno HTTP da solicitação. No caso de
-                          ocorrer um timeout client side preencher com um código
-                          403 (conforme documentação ).
-                        type: integer
-                        format: int32
-                        minimum: 200
-                        maximum: 599
-                        example: 200
-                      httpMethod:
-                        type: string
-                        description: Método HTTP da solicitação.
-                        enum:
-                          - GET
-                          - POST
-                          - PUT
-                          - DELETE
-                          - PATCH
-                        example: GET
-                      correlationId:
-                        description: >-
-                          ID de correlação que identifica uma sequência de
-                          chamadas inter-relacionadas no ecossistema. Diferente
-                          do fapiInteractionId que serve para identificar cada
-                          par request-response (interação), o identificador de
-                          correlação serve para ligar diferentes reportes quando
-                          estes representam uma jornada ou uma sequência de
-                          chamadas. Este valor é de livre provimento pelo
-                          reportador.
-                        type: string
-                        pattern: ^[- /:_.',0-9a-zA-Z]{0,100}$
-                        maxLength: 100
-                        example: >-
-                          uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                      timestamp:
-                        description: >-
-                          Data/Hora UTC no formato ISO8601 com milissegundos
-                          (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada
-                          foi disparada, imediatamente antes do primeiro byte
-                          enviado na requisição.
-                        type: string
-                        format: date-time
-                        maxLength: 28
-                        example: '2021-11-11T18:08:08.278Z'
-                      processTimespan:
-                        description: >-
-                          Tempo em milissegundos inteiros decorrido desde o
-                          registro do timestamp até a chegada do primeiro byte
-                          da resposta do server.
-                        type: integer
-                        format: int16
-                        example: 120
-                      clientSSId:
-                        description: >-
-                          Identificador do software statement de onde a chamada
-                          foi disparada. A PCM garante que foi esta orgId que
-                          obteve o token de acesso utilizado neste reporte.
-                        type: string
-                        format: uuid
-                        maxLength: 36
-                        pattern: >-
-                          ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-                        example: 84570da9-567b-4201-9b77-c715bc5bffde
-                      clientOrgId:
-                        description: >-
-                          Identificador da organização **de onde** a chamada foi
-                          disparada
-                        type: string
-                        format: uuid
-                        maxLength: 36
-                        pattern: >-
-                          ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-                        example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
-                      serverOrgId:
-                        description: >-
-                          Identificador da organização **para onde** a chamada
-                          foi feita
-                        type: string
-                        format: uuid
-                        maxLength: 36
-                        pattern: >-
-                          ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-                        example: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
-                      endpointUriPrefix:
-                        description: >
-                          Endereço do servidor de destino da chamada, incluindo
-                          o prefixo quando houver. O formato do campo deverá ser
-                          o seguinte: `https://{host}/{prefixo}`, sendo:
-
-
-                          * `host`: endereço FQDN do servidor de destino
-
-                          * `prefixo`: toda a parte do path que vem antes da
-                          string `/open-banking`
-
-
-                          Exemplos:
-
-
-                          1. Para uma requisição em
-                          `https://openbanking.instituicao-1.com.br/opbk/open-banking/products-services/v1/business-accounts`,
-                          o dado a ser enviado é
-                          `https://openbanking.instituicao-1.com.br/opbk`.
-
-                          1. Para uma requisição em
-                          `https://openbanking.instituicao-2.com.br/open-banking/products-services/v1/business-accounts`,
-                          o dado a ser enviado é
-                          `https://openbanking.instituicao-1.com.br/`.
-
-
-                          Nos reportes relativos aos endpoints /token e
-                          /register este campo deverá conter a URL inteira do
-                          request. 
-
-
-                          Exemplos:
-                          `https://oauth2.cartaodummy.opf.instituicao/as/token.oauth2`
-                          `https://instituicao.com.br/orgs/instituicao/reg`
-                        type: string
-                        pattern: ^[- /:_.',0-9a-zA-Z]{0,200}$
-                        maxLength: 200
-                        example: https://openbanking.instituicao-1.com.br/opbk
-                      role:
-                        description: >-
-                          ENUM indicando se o reporte que está sendo enviado
-                          apresenta a visão do server ou do client. Obrigatório
-                          valor "CLIENT"
-                        type: string
-                        enum:
-                          - CLIENT
-                          - SERVER
-                      additionalInfo:
-                        description: >-
-                          Informações adicionais sobre o reporte deste
-                          endpoint/método. Possui característica variável. As
-                          regras de preenchimento estão na documentação
-                          funcional em
-                          [openfinancebrasil](https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/37879861/Reporte#additionalInfo).
-
-                          Caso não exista o campo enviar como um objeto vazio: 
-                          {}
-                        type: object
-                        properties:
-                          consentId:
-                            description: >-
-                              O consentId é o identificador único do
-                              consentimento e deverá ser um URN - Uniform
-                              Resource Name.
-
-
-                              Deve ser preenchido com a mesma string obtida no
-                              campo `.data.consentId` retornado após a chamada
-                              inicial na API "POST /consent". *Ao reportar o uso
-                              de um endpoint /token, o identificador único de
-                              consentimento só será reportado nos casos em que
-                              "grant_type" é do tipo "authorization_code" ou do
-                              tipo "refresh_token", uma vez que esta informação
-                              de consentId é inexistente quando "grant_type" é
-                              do tipo
-                            type: string
-                          personType:
-                            description: >-
-                              Identifica a natureza do solicitante em uma
-                              transação ou consentimento.
-
-                              Deve ser preenchida baseado no tipo de pessoa
-                              responsável pelo consentimento. Deverá ser
-                              obserdado se `.data.businessEntity` estiver
-                              preenchido no payload, se estiver então preencher
-                              com "PJ", se não estiver então preencher com "PF"
-                            type: string
-                          localInstrument:
-                            description: >-
-                              Especifica a forma de iniciação do pagamento.
-
-                              Deve ser preenchido com a mesma string informada
-                              no payload ".data.localInstrument"
-                            type: string
-                          status:
-                            description: >-
-                              Registra os códigos de erro detalhados de uma
-                              requisição que resultou em um erro HTTP (série 4xx
-                              ou 5xx).
-
-                              Identifica o status atual do recurso (como um
-                              consentimento ou um pagamento) que está sendo
-                              reportado.
-
-                              Deve ser preenchido com a mesma string obtida no
-                              ".data.status"
-                            type: string
-                          clientIp:
-                            description: >-
-                              Deve ser preenchido com o Endereço IPv4 ou IPv6 do
-                              client que fez a requisição
-                            type: string
-                          rejectReason:
-                            description: >-
-                              Deve ser preenchido com a mesma string obtida no
-                              ".data.rejectionReason.code"
-                            type: string
-                          errorCodes:
-                            description: >-
-                              Registra os códigos de erro detalhados de uma
-                              requisição que resultou em um erro HTTP (série 4xx
-                              ou 5xx).
-
-                              Caso o HTTP Code seja 4XX ou 5XX, esse campo deve
-                              ser preenchido com a lista das strings obtidas em
-                              ".errors[].code" . Não havendo string, deve ser
-                              enviada uma lista vazia.
-                            type: string
-                          webhookEnable:
-                            description: >-
-                              Indica o identificador x-webhook-interaction-id
-                              quando uma requisição GET é realizada após o
-                              estímulo de um webhook.
-
-                              Indica se há URLs de webhook configuradas em uma
-                              requisição.
-
-                              Deve ser preenchido com o valor booleano TRUE caso
-                              haja pelo menos um item indicado na lista do campo
-                              ".webhook_uris" no payload, caso contrário deverá
-                              ser preenchido com o valor booleano FALSE
-                            type: string
-                          webhookInteractionId:
-                            description: >-
-                              Caso o GET esteja sendo feito após o estímulo do
-                              webhook, o x-webhook-interaction-id deverá ser
-                              indicado
-                            type: string
-                          enrollmentId:
-                            description: >-
-                              Identificador usado para registrar uma jornada ou
-                              um vínculo inicial.
-
-                              Deve ser preenchido com a mesma string obtida no
-                              campo `.data.enrollmentId` retornado após a
-                              chamada inicial na API "POST /enrollments". *Ao
-                              reportar o uso de um endpoint /token, o
-                              identificador único de consentimento só será
-                              reportado nos casos em que "grant_type" é do tipo
-                              "authorization_code" ou do tipo "refresh_token",
-                              uma vez que esta informação de enrollmentId é
-                              inexistente quando "grant_type" é do tipo
-                              "client_credentials".
-                            type: string
-                          authenticatorAttachment:
-                            description: >-
-                              Descreve como o autenticador (por exemplo, um
-                              dispositivo FIDO) está anexado ao cliente que
-                              realiza a autenticação (ex: platform para
-                              autenticadores integrados como Face ID ou
-                              cross-platform para chaves de segurança USB)."
-
-                              10. platform: incluir na descrição "Identifica a
-                              plataforma utilizada.
-
-                              Deve ser preenchido com a mesma string definida em
-                              ".data.authenticatorAttachment".  Não havendo
-                              string, deve ser explicitamente enviada esse
-                              additionalInfo como sendo uma string vazia.
-                            type: string
-                          platform:
-                            description: >-
-                              Deve ser preenchido com a mesma string definida em
-                              ".data.platform"
-                            type: string
-                          rp:
-                            description: >-
-                              Relying Party" (RP) onde reside originalmente na
-                              requisição FIDO.
-
-                              Deve ser preenchido com a mesma string definida em
-                              ".data.rp"
-                            type: string
-                          rejectionReasonCode:
-                            description: >-
-                              Código da razão pela qual um consentimento ou
-                              pagamento foi rejeitado.
-
-                              Deve ser preenchido com a mesma string obtida no
-                              ".data.rejectionReason.code"
-                            type: string
-                          rejectionReasonDetail:
-                            description: >-
-                              Detalhe mais específico sobre a rejeição de um
-                              consentimento ou pagamento.
-
-                              Deve ser preenchido com a mesma string obtida no
-                              ".data.rejectionReason.detail"
-                            type: string
-                          authorisationFlow:
-                            description: >-
-                              Identifica o modo de pagamento acionado no
-                              consentimento.
-
-                              Identifica o fluxo de autorização em que um
-                              pagamento ou operação foi solicitado.
-
-                              Deve ser preenchido com a mesma string obtida no
-                              ".data.authorisationFlow"
-                            type: string
-                          paymentType:
-                            type: string
-                            description: >
-                              Identifica o modo de pagamento acionado no
-                              consentimento
-
-                              1. Envio obrigatório para a role Client​
-
-                              2. Conteudo ENUM do novo campo varia de acordo com
-                              o endpoint conforme tabela.
-                            enum:
-                              - IMMEDIATE
-                              - SCHEDULED
-                              - RECURRENT
-                              - SWEEPING
-                          dropReason:
-                            description: >-
-                              Regras:
-
-
-                              • O campo dropReason deve ser adicionado nas
-                              informações do campo additionalInfo que deverá ser
-                              enviado no reporte do provedor do serviço
-                              consumido (papel SERVER)
-
-                              • O reporte deverá ser feito por todos os
-                              transmissores de dados e detentoras de conta. Para
-                              os casos em que ocorram falhas técnicas que
-                              impossibilitem a verificação do CPF/CNPJ
-                              (incluindo, mas não se limitando, a erros HTTP
-                              4xx, 500 ou timeout na resposta), o reporte deve
-                              ser realizado com o valor NO_CREDENTIAL, Em
-                              jornadas de múltipla alçada de pessoas jurídicas,
-                              quando a autenticação é bem-sucedida mas os
-                              poderes constituídos são insuficientes para
-                              finalização do Hybrid Flow, deve-se usar
-                              NO_AUTHORITY.
-
-                              Diretrizes:
-
-
-                              • NONE: quando o CPF (loggedUser) / CNPJ
-                              (businessEntity) possui credencial autenticadora e
-                              poderes suficientes para prosseguir o fluxo
-                              monitorado - exemplo: PF, cliente, que possui
-                              credencial ativa, mas não se autenticou; cliente
-                              que se autenticou utilizando a credencial correta.
-
-                              • NO_CREDENTIAL: quando o CPF (loggedUser) / CNPJ
-                              (businessEntity) não for cliente ou não possuir
-                              credencial válida/ativa para prosseguir no fluxo
-                              monitorado ou quando o HTTP response code for
-                              diferente de 201.
-
-                              • NO_AUTHORITY: quando o CPF (loggedUser) / CNPJ
-                              (businessEntity) consegue se autenticar, mas não
-                              dispõe de poderes ou alçadas para prosseguir no
-                              fluxo de compartilhamento de dados e serviços.
-
-                              • NO_AUTHORITY_PERSON_MISMATCH: quando o CPF
-                              (loggedUser) não possui relação com a credencial
-                              utilizada na etapa de autenticação do Hybrid Flow
-                              - exemplo: consentimento criado para um CPF e
-                              autenticado por outro; criado para um CNPJ e
-                              autenticado por CPF sem relação com o CNPJ.
-                            type: string
-                          grantType:
-                            type: string
-                            description: >-
-                              O valor deste campo deve ser o valor enviado no
-                              campo grant_type da chamada ao endpoint de token
-
-
-                              AUTHORIZATION_CODE: Utilizado na autorização de
-                              acesso a um recurso por meio de login de usuário
-
-
-                              REFRESH_TOKEN: Utilizado para obter um novo token
-                              de acesso quando o token anterior expira
-
-
-                              CLIENT_CREDENTIALS: Utilizado na autorização de
-                              acesso entre aplicações onde não há a figura do
-                              usuário
-                            enum:
-                              - AUTHORIZATION_CODE
-                              - REFRESH_TOKEN
-                              - CLIENT_CREDENTIALS
-                          cancelledFrom:
-                            type: string
-                            description: >-
-                              Identifica origem da rejeição ou revogação de um
-                              vínculo de dispositivo.
-                            enum:
-                              - INICIADORA
-                              - DETENTORA
-                          interval:
-                            type: string
-                            description: >-
-                              Periodicidade que a recorrência foi definida
-                              (semanal, trimestral, anual...)​.
-
-
-                              Regras:
-
-
-                              Preencher com o valor do campo "interval"​
-                            enum:
-                              - FIXO
-                              - VARIAVEL
-                          amountType:
-                            type: string
-                            description: >-
-                              Valida se o serviço contratado possui maior
-                              conversão em relação ao tipo do valor definido,
-                              sendo ele fixo ou variável​.
-                          isFirstPayment:
-                            type: string
-                            description: >-
-                              Valida se o serviço possui um pagamento associado
-                              na adesão.
-                            enum:
-                              - 'TRUE'
-                              - 'FALSE'
-                          hasMinimumAmount:
-                            type: string
-                            description: >-
-                              Valida se possui o valor mínimo definido pelo
-                              usuário recebedor​.
-                            enum:
-                              - 'TRUE'
-                              - 'FALSE'
-                          isRetryAccepted:
-                            type: string
-                            description: >-
-                              Identifica se foi autorizado a tentativas de
-                              pagamento em dias subsequentes na situação de
-                              falha do pagamento da recorrência
-
-
-                              Regras:
-
-
-                              Preencher com o valor do campo "isRetryAccepted"​
-                          recurringPaymentId:
-                            type: string
-                            description: >-
-                              Contagem de acionamentos feitos no pagamento
-
-
-                              Regras:
-
-
-                              Para Pagamentos v4: Preencher com o valor do campo
-                              "/data/paymentId"
-
-                              Para Pagamentos Automáticos v2: Preencher com o
-                              valor do campo "/data/recurringPaymentId"​
-                          originalRecurringPaymentId:
-                            type: string
-                            description: >-
-                              Identifica o primeiro pagamento da recorrência em
-                              relação as retentativas​.
-
-
-                              Regras:
-
-
-                              Preencher com o valor do campo
-                              "originalRecurringPaymentId"​
-                          cancellationReason:
-                            type: string
-                            description: >-
-                              Identifica o estado que o pagamento estava quando
-                              foi cancelado​.
-
-
-                              Regras:
-
-
-                              Preencher com o valor do campo
-                              "cancellation.reason"
-                          nfcPayment:
-                            type: string
-                            description: |-
-                              Indica se o pagamento foi realizado via NFC.
-
-                              Regras:
-
-                              Preencher com o valor do campo "nfcPayment"
-                            enum:
-                              - 'TRUE'
-                              - 'FALSE'
-                          revocationReasonCode:
-                            description: |-
-                              Código indicador do motivo da revogação
-                              1. Envio obrigatório para as roles Server e Client
-                            type: string
-                          revocationReasonDetail:
-                            description: >-
-                              Detalhe sobre o motivo de revogação indicado no
-                              campo
-
-                              1. Envio obrigatório para a role Server e Client
-                            type: string
-                          revokedBy:
-                            type: string
-                            description: |-
-                              Quem iniciou a solicitação de revogação 
-                              1. Envio obrigatório para a role Server e Client
-                            enum:
-                              - INICIADORA
-                              - USUARIO
-                              - DETENTORA
-                          revokedFrom:
-                            type: string
-                            description: |-
-                              Canal onde iniciou-se o processo de revogação
-                              1. Envio obrigatório para a role Server e Client
-                            enum:
-                              - INICIADORA
-                              - DETENTORA
-                          rejectedBy:
-                            type: string
-                            description: |-
-                              Quem iniciou a solicitação de rejeição
-                              1. Envio obrigatório para a role Server e Client
-                            enum:
-                              - NICIADORA
-                              - USUARIO
-                              - DETENTORA
-                          rejectedFrom:
-                            type: string
-                            description: |-
-                              Canal onde iniciou-se o processo de rejeição
-                              1. Envio obrigatório para a role Server e Client
-                            enum:
-                              - INICIADORA
-                              - DETENTORA
-                          paymentDate:
-                            type: string
-                            description: >-
-                              Data em que o pagamento será realizado
-                              (mutualmente excludente com o campo
-                              paymentSchedule)
-                          paymentSchedule:
-                            type: string
-                            description: >-
-                              Estrutura responsavel pela parametrização dos
-                              pagamentos que acontecerão sob aquele
-                              consentimento (mutualmente excludente com o campo
-                              paymentDate)
-                          recurringPaymentDate:
-                            type: string
-                            description: Data em que o pagamento será realizado
-                          paymentList:
-                            type: object
-                            properties:
-                              paymentId:
-                                type: string
-                                description: >-
-                                  Código ou identificador unico informado pela
-                                  instituição detentora da conta para
-                                  representar a iniciação de pagamento
-                              consentId:
-                                type: string
-                                description: >-
-                                  Identificador unico do consentimento criado
-                                  para a iniciação de pagamento socilitada
-                              statusUpdateDateTime:
-                                type: string
-                                description: >-
-                                  Data e hora da ultima atualização da iniciação
-                                  de pagamento
-                              status:
-                                type: string
-                                description: Estado atual de pagamento
-                              rejectionReasonCode:
-                                type: string
-                                description: >-
-                                  Código identificador do motivo de rejeição.
-                                  Deve ser enviado vazio se não houver
-                                  conteúdos, seguindo a mesma regra da API de
-                                  negócio relacionada.
-                              rejectionReasonDetail:
-                                type: string
-                                description: >-
-                                  Detalhe sobre o código identificador do motivo
-                                  de rejeição. Deve ser enviado vazio se não
-                                  houver conteudos, seguindo a mesma regra da
-                                  API de negócios relacionada
-                            required:
-                              - paymentId
-                              - consentId
-                              - statusUpdateDateTime
-                              - status
-                              - rejectionReasonCode
-                              - rejectionReasonDetail
-                            description: >-
-                              Lista de dados de pagamentos para atrelados a um
-                              recurring consentId
-                        required:
-                          - paymentDate
-                          - paymentSchedule
-                          - recurringPaymentDate
-                          - paymentList
-                    required:
-                      - endpoint
-                      - statusCode
-                      - httpMethod
-                      - timestamp
-                      - processTimespan
-                      - clientSSId
-                      - clientOrgId
-                      - serverOrgId
-                      - endpointUriPrefix
-                      - role
-                      - additionalInfo
+                  - $ref: '#/components/schemas/ClientReportRequest'
                   - $ref: '#/components/schemas/ServerReportRequest'
             example:
               - timestamp: '2021-11-11T18:08:08.894Z'
@@ -904,7 +248,7 @@ paths:
           headers: {}
       security:
         - bearer: []
-  /report-api/v1/private/report/{reportId}:
+  /report-api/v1/private/report/{fapiInteractonId}:
     get:
       summary: Consulta um report em específico usando um identificador
       deprecated: false
@@ -924,15 +268,12 @@ paths:
       tags:
         - Private API
       parameters:
-        - name: reportId
+        - name: fapiInteractonId
           in: path
-          description: Identificador do reporte que está sendo consultado
+          description: ''
           required: true
-          example: '{{reportId}}'
           schema:
             type: string
-            pattern: ^[- /:_.',0-9a-zA-Z]{0,100}$
-            maxLength: 100
       responses:
         '200':
           description: ''
@@ -2811,6 +2152,24 @@ paths:
           headers: {}
       security:
         - bearer: []
+  /report-api/v1/credit-portabilities/d78fc4e5-37ca-4da3-adf2-9b082bf92285:
+    get:
+      summary: Untitled Endpoint
+      deprecated: false
+      description: ''
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
   /report-api/v1/credit-portabilities/server:
     post:
       summary: Inclusão de reports de credit portability para server
@@ -3418,7 +2777,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/PaymentStatusResponse'
           headers: {}
-      security: []
+      security:
+        - bearer: []
   /report-api/v1/payments/status/{paymentId}:
     get:
       summary: Consulta de um report específico usando identificador
@@ -3442,7 +2802,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentStatusGetResponse'
           headers: {}
-      security: []
+      security:
+        - bearer: []
 components:
   schemas:
     ClientReportRequest:
@@ -4009,8 +3370,80 @@ components:
                 - temporarilyUnavailable
                 - pendingAuthorisation
               description: Sumarização das quantidades de reportes por status
-          required:
-            - statusSummary
+            companyProfileInfo:
+              type: object
+              properties:
+                naturezaJurídica:
+                  type: string
+                  description: Natureza jurídica
+                porteEmpresa:
+                  type: string
+                  description: Porte do empresa
+              description: Porte do client PJ e natureza jurídica
+            paymentDate:
+              type: string
+              description: Data em que o pagamento será realizado.
+              example: '2025-09-01'
+            paymentSchedule:
+              type: string
+              description: >-
+                Estrutura responsável pela parametrização dos pagamentos que
+                acontecerão sob aquele consentimento
+            paymentList:
+              type: array
+              items:
+                type: object
+                properties:
+                  paymentId:
+                    type: string
+                    description: >-
+                      Código ou identificador único informado pela instituição
+                      detentora da conta para representar a iniciação de
+                      pagamento​.
+                    example: 4d4dec4b-5960-4041-8099-1340b8c8a4bb
+                  consentId:
+                    type: string
+                    description: >-
+                      Identificador único do consentimento criado para a
+                      iniciação de pagamento solicitada​.
+                    example: 4d4dec4b-5960-4041-8099-1340b8c8a4bb
+                  statusUpdateDateTime:
+                    type: string
+                    description: >-
+                      Data e hora da última atualização da iniciação de
+                      pagamento.
+                    example: '2025-09-01'
+                  status:
+                    type: string
+                    description: Estado atual do pagamento.
+                    example: ASCS
+                  rejectionReasonCode:
+                    type: string
+                    description: >-
+                      Código identificador do motivo de rejeição. Deve ser
+                      enviado vazio se não houver conteúdos, seguindo a mesma
+                      regra da API de negócio relacionada
+                    example: '001'
+                  rejectionReasonDetail:
+                    type: string
+                    description: >-
+                      Detalhe sobre o código identificador do motivo de
+                      rejeição. Deve ser enviado vazio se não houver conteúdos,
+                      seguindo a mesma regra da API de negócio relacionada
+                    example: Detalhes sobre a rejeição
+              description: Lista de dados de pagamentos com agendamentos recorrentes
+              minItems: 0
+              maxItems: 60
+            recurringPaymentDate:
+              type: string
+              description: Data em que o pagamento será realizado
+            referenceStartDate:
+              type: string
+              description: >-
+                Data prevista para o início do ciclo de cobrança dos pagamentos
+                associados à recorrência
+              title: ''
+              example: '2025-09-01'
     ServerReportRequest:
       description: >-
         Representa os dados que deverão ser enviados para a inclusão de reportes
@@ -4889,13 +4322,6 @@ components:
         - statusCode
         - httpMethod
         - endpointUriPrefix
-        - portabilityId
-        - contractId
-        - creationDateTime
-        - originalContractTerm
-        - propositionTerm
-        - creditPortabilityStatus
-        - rejectionReason
     CreditPortabilityServerRequest:
       type: object
       properties:
@@ -4986,6 +4412,13 @@ components:
             ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           description: Identificador da organização para onde a chamada foi feita.
           example: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
+        portabilityId:
+          type: string
+          description: Código identificador do pedido de portabilidade realizado.
+          minLength: 1
+          maxLength: 100
+          format: uuid
+          example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
         statusUpdateDateTime:
           type: string
           description: >-
@@ -5190,6 +4623,39 @@ components:
           type: string
           format: date-time
           maxLength: 28
+          description: Carimbo do tempo do momento da última atualização do registro
+        status:
+          type: string
+          description: >-
+            Informa o status do registro de reporte.
+
+
+            DISCARDED: O status DISCARDED indica que o reporte enviado pelo
+            participante foi rejeitado pela PCM. O motivo do descarte será
+            enviado com a resposta, podendo ser por conta de um reporte inválido
+            ou por um erro no processamento. Não é possível modificar um reporte
+            DISCARDED, portanto o reportador deverá corrigir o registro que
+            apresentou erro e reenviar via POST.
+
+            SINGLE: O status SINGLE indica que o reporte em questão não tem uma
+            contraparte. Ele é utilizado em casos onde a conciliação entre dois
+            reportes não é possível.
+
+            ACCEPTED: O status ACCEPTED indica que a validação de formato do
+            reporte não tem erros e este será enviado para processamento.
+
+            UNPAIRED: O status UNPAIRED significa que o reporte atual não possui
+            uma correspondência em outro reporte através do atributo
+            fapiInteractionId. Indica um reporte divergente.
+
+            PAIRED_INCONSISTENT: O status PAIRED_INCONSISTENT significa que o
+            reporte corrente possui uma contraparte com o mesmo
+            fapiInteractionId, mas os demais dados estão inconsistentes. Indica
+            um reporte divergente.
+
+            PAIRED: Indica que o reporte tem uma contraparte com o mesmo
+            fapiInteractionId e os demais dados estão conciliados. Representa o
+            estado final desejado em um fluxo correto.
     HybridFlowClientRedirectToServerReportRequest:
       description: ''
       type: array
