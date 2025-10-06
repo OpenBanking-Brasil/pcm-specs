@@ -5336,6 +5336,7 @@ components:
             - RECURRENT
             - SWEEPING
             - AUTOMATIC
+            - SCHEDULE
           example: RECURRENT
         statusReasonCode:
           type: string
