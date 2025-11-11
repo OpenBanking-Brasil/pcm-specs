@@ -2436,8 +2436,6 @@ paths:
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
                 rejectedBy: PROPONENTE
-                consentId: "d5a45e62-eca5-4df2-8245-e9b47d457cca"
-                errorCode: "500"
               - timestamp: '2021-11-11T18:08:08.278Z'
                 fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
                 clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
@@ -2456,8 +2454,6 @@ paths:
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
                 rejectedBy: PROPONENTE
-                consentId: "57660b7f-687b-46b5-aaff-4f018b56af4a"
-                errorCode: "400"
               - timestamp: '2021-11-11T18:08:08.278Z'
                 fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
                 clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
@@ -2476,8 +2472,6 @@ paths:
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
                 rejectedBy: PROPONENTE
-                consentId: "57660b7f-687b-46b5-aaff-4f018b56af4a"
-                errorCode: "400"
       responses:
         '200':
           description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
@@ -4153,15 +4147,6 @@ components:
 
             prefixo: toda a parte do path que vem antes da string /open-banking
           example: https://openbanking.instituicao-1.com.br/opbk
-        consentId:
-          type: string
-          format: uuid
-          maxLength: 100
-          minLength: 1
-          pattern: >-
-            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-          description: Código identificador do consentimento de dados utilizado pela instituição proponente para acessar as informações do contrato de crédito do cliente na credora.
-          example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
         contractId:
           type: string
           minLength: 20
@@ -4280,10 +4265,6 @@ components:
             - USUARIO
             - CREDORA
           example: CREDORA
-        errorCode:
-          type: string
-          description: Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido com apenas um dos itens obtidos em \".errors[].code\" . Não havendo string, deve ser enviada uma lista vazia.
-          example: "400"
       required:
         - timestamp
         - fapiInteractionId
@@ -4294,7 +4275,6 @@ components:
         - statusCode
         - httpMethod
         - endpointUriPrefix
-        - consentId
     CreditPortabilityServerRequest:
       type: object
       properties:
@@ -4330,15 +4310,6 @@ components:
             Status de retorno HTTP da solicitação. No caso de ocorrer um timeout
             client side preencher com um código 403 (conforme documentação ).
           example: 200
-        consentId:
-          type: string
-          format: uuid
-          maxLength: 100
-          minLength: 1
-          pattern: >-
-            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-          description: Código identificador do consentimento de dados utilizado pela instituição proponente para acessar as informações do contrato de crédito do cliente na credora.
-          example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
         httpMethod:
           type: string
           description: Método HTTP da solicitação.
@@ -4497,10 +4468,6 @@ components:
             - CANCELLED
             - PAYMENT_ISSUE
           example: RECEIVED
-        errorCode:
-            type: string
-            description: Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido com apenas um dos itens obtidos em \".errors[].code\" . Não havendo string, deve ser enviada uma lista vazia.
-            example: "400"
       required:
         - fapiInteractionId
         - endpoint
