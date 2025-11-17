@@ -4029,7 +4029,7 @@ components:
         timestamp:
           type: string
           format: date-time
-          maxLength: 28
+          pattern: /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           description: >-
             Data/Hora UTC no formato ISO8601 com milissegundos
             (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada foi
@@ -4159,10 +4159,8 @@ components:
           example: '92792126019929279212650822221989319252576'
         creationDateTime:
           type: string
-          minLength: 20
-          maxLength: 20
           pattern: >-
-            ^(\d{4})-(1[0-2]|0?[1-9])-(3[01]|[12][0-9]|0?[1-9])T(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)Z$
+            /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           description: >-
             Data e hora em que a Proponente registrou a presente proposta
             (chamada ao POST /portabilities). Uma string com data e hora
@@ -4231,8 +4229,7 @@ components:
             com data e hora conforme especificação ISO-8601, sempre com a
             utilização de timezone UTC(UTC time format).
           pattern: >-
-            ^(\d{4})-(1[0-2]|0?[1-9])-(3[01]|[12][0-9]|0?[1-9])T(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)Z$
-          maxLength: 20
+            /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           example: '2020-07-21T08:30:00Z'
         rejectionReason:
           type: string
@@ -4336,7 +4333,7 @@ components:
         timestamp:
           type: string
           format: date-time
-          maxLength: 28
+          pattern: /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           description: >-
             Data/Hora UTC no formato ISO8601 com milissegundos
             (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada foi
@@ -4379,8 +4376,7 @@ components:
             com data e hora conforme especificação ISO-8601, sempre com a
             utilização de timezone UTC(UTC time format).
           pattern: >-
-            ^(\d{4})-(1[0-2]|0?[1-9])-(3[01]|[12][0-9]|0?[1-9])T(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)Z$
-          maxLength: 20
+            /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           example: '2020-07-21T08:30:00Z'
         rejectionReason:
           type: string
