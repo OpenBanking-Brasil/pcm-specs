@@ -2328,107 +2328,99 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/CreditPortabilityClientRequest'
-            examples:
-              Request Valido:
-                value:
-                  - timestamp: '2021-11-11T18:08:08.278Z'
-                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                    endpoint: /credit-operations/{contractId}/portability-eligibility
-                    statusCode: 200
-                    httpMethod: POST
-                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                    processTimespan: 120
-                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                    role: CLIENT
-                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                    contractId: '92792126019929279212650822221989319252576'
-                    creationDateTime: '2020-07-21T08:30:00Z'
-                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                    originalContractCET: '0.290000'
-                    originalPropositionCET: '0.290000'
-                    originalContractTerm: 57
-                    propositionTerm: 30
-                    creditPortabilityStatus: PENDING
-                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                    rejectionReason: CANCELADO_PELO_CLIENTE
-                    rejectedBy: PROPONENTE
-                  - timestamp: '2021-11-11T18:08:08.278Z'
-                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                    endpoint: /credit-operations/{contractId}/portability-eligibility
-                    statusCode: 200
-                    httpMethod: POST
-                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                    processTimespan: 120
-                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                    role: CLIENT
-                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                    contractId: '92792126019929279212650822221989319252576'
-                    creationDateTime: '2020-07-21T08:30:00Z'
-                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                    originalContractCET: '0.290000'
-                    originalPropositionCET: '0.290000'
-                    originalContractTerm: 57
-                    propositionTerm: 30
-                    creditPortabilityStatus: PENDING
-                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                    rejectionReason: CANCELADO_PELO_CLIENTE
-                    rejectedBy: PROPONENTE
-                  - timestamp: '2021-11-11T18:08:08.278Z'
-                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                    endpoint: /credit-operations/{contractId}/portability-eligibility
-                    statusCode: 200
-                    httpMethod: POST
-                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                    processTimespan: 120
-                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                    role: CLIENT
-                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                    contractId: '92792126019929279212650822221989319252576'
-                    creationDateTime: '2020-07-21T08:30:00Z'
-                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                    originalContractCET: '0.290000'
-                    originalPropositionCET: '0.290000'
-                    originalContractTerm: 57
-                    propositionTerm: 30
-                    creditPortabilityStatus: PENDING
-                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                    rejectionReason: CANCELADO_PELO_CLIENTE
-                    rejectedBy: PROPONENTE
-                  - timestamp: '2021-11-11T18:08:08.278Z'
-                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                    endpoint: /credit-operations/{contractId}/portability-eligibility
-                    statusCode: 200
-                    httpMethod: POST
-                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                    processTimespan: 120
-                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                    role: CLIENT
-                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                    contractId: '92792126019929279212650822221989319252576'
-                    creationDateTime: '2020-07-21T08:30:00Z'
-                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                    originalContractCET: '0.290000'
-                    originalPropositionCET: '0.290000'
-                    originalContractTerm: 57
-                    propositionTerm: 30
-                    creditPortabilityStatus: PENDING
-                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                    rejectionReason: CANCELADO_PELO_CLIENTE
-                    rejectedBy: PROPONENTE
-                summary: Request Valido
-                description: O request apresentado tem todos os campos validados.
+            example:
+              - timestamp: '2021-11-11T18:08:08.278Z'
+                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                endpoint: /credit-operations/{contractId}/portability-eligibility
+                statusCode: 200
+                httpMethod: POST
+                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                processTimespan: 120
+                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                role: CLIENT
+                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                creationDateTime: '2020-07-21T08:30:00Z'
+                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                originalContractCET: '0.290000'
+                originalPropositionCET: '0.290000'
+                originalContractTerm: 57
+                propositionTerm: 30
+                creditPortabilityStatus: PENDING
+                statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                rejectionReason: CANCELADO_PELO_CLIENTE
+                rejectedBy: PROPONENTE
+              - timestamp: '2021-11-11T18:08:08.278Z'
+                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                endpoint: /credit-operations/{contractId}/portability-eligibility
+                statusCode: 200
+                httpMethod: POST
+                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                processTimespan: 120
+                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                role: CLIENT
+                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                creationDateTime: '2020-07-21T08:30:00Z'
+                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                originalContractCET: '0.290000'
+                originalPropositionCET: '0.290000'
+                originalContractTerm: 57
+                propositionTerm: 30
+                creditPortabilityStatus: PENDING
+                statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                rejectionReason: CANCELADO_PELO_CLIENTE
+                rejectedBy: PROPONENTE
+              - timestamp: '2021-11-11T18:08:08.278Z'
+                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                endpoint: /credit-operations/{contractId}/portability-eligibility
+                statusCode: 200
+                httpMethod: POST
+                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                processTimespan: 120
+                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                role: CLIENT
+                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                creationDateTime: '2020-07-21T08:30:00Z'
+                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                originalContractCET: '0.290000'
+                originalPropositionCET: '0.290000'
+                originalContractTerm: 57
+                propositionTerm: 30
+                creditPortabilityStatus: PENDING
+                statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                rejectionReason: CANCELADO_PELO_CLIENTE
+                rejectedBy: PROPONENTE
+              - timestamp: '2021-11-11T18:08:08.278Z'
+                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                endpoint: /credit-operations/{contractId}/portability-eligibility
+                statusCode: 200
+                httpMethod: POST
+                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                processTimespan: 120
+                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                role: CLIENT
+                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                creationDateTime: '2020-07-21T08:30:00Z'
+                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                originalContractCET: '0.290000'
+                originalPropositionCET: '0.290000'
+                originalContractTerm: 57
+                propositionTerm: 30
+                creditPortabilityStatus: PENDING
+                statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                rejectionReason: CANCELADO_PELO_CLIENTE
+                rejectedBy: PROPONENTE
       responses:
         '200':
           description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
@@ -2834,7 +2826,133 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  reportId:
+                    type: string
+                    format: uuid
+                    maxLength: 36
+                    pattern: >-
+                      ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+                    description: >-
+                      Identificador único do registro criado na Plataforma de
+                      Coleta de Métricas.
+                  pairedReportId:
+                    type: string
+                    format: uuid
+                    maxLength: 36
+                    pattern: >-
+                      pattern:
+                      ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+                    description: >-
+                      Esse atributo indica o reportId do registro que forma uma
+                      correlação com o presente registro. Se essa informação
+                      existir, o status do registro atual deverá ser PAIRED
+                  creditPortabilityStatus:
+                    type: string
+                    description: >-
+                      Informação sobre o status de um pedido de portabilidade de
+                      crédito, onde:
+
+
+                      RECEIVED: Estado inicial. Indica que o pedido de
+                      portabilidade foi solicitado junto à instituição credora.
+                      O pedido deve permanecer neste estado até o próximo dia
+                      útil (D+1) onde começará a contar o prazo de 3 dias úteis
+                      para a etapa de contraproposta e o pedido de portabilidade
+                      deverá ser movido para PENDING
+
+                      PENDING: Indica que o pedido de portabilidade de crédito
+                      está na fase de contraproposta, onde a instituição credora
+                      poderá enviar uma contraproposta ou não para o cliente por
+                      qualquer canal (email, telefone, etc.) porém o aceite só
+                      deverá ser valido se o cliente aprovar no canal digital da
+                      instituição credora
+
+                      ACCEPTED_SETTLEMENT_IN_PROCESS: Indica que a
+                      contraproposta não foi aceita pelo cliente e a instituição
+                      proponente terá que quitar o valor do contrato no mesmo
+                      dia em que o estado foi ativado.
+
+                      ACCEPTED_SETTLEMENT_COMPLETED: Indica que a instituição
+                      proponente já liquidou o contrato e comunicou a respeito à
+                      credora que está validando os dados do contrato bem como
+                      valores recebidos para a quitação do mesmo (nesta etapa a
+                      instituição credora tem 2 dias úteis para fornecer a
+                      confirmação e o recibo de quitação do contrato de
+                      empréstimo)
+
+                      PORTABILITY_COMPLETED: Indica que o pedido de
+                      portabilidade foi concluído com sucesso REJECTED: Indica
+                      que o pedido de portabilidade de crédito foi rejeitado,
+                      seja porque o cliente aceitou a contraproposta, ou porque
+                      a proponente rejeitou a liquidação que excedeu em 15% o
+                      valor do contrato original, entre outras possibilidades
+
+                      CANCELLED: Indica que o cliente cancelou o pedido de
+                      portabilidade de crédito
+
+                      PAYMENT_ISSUE: Indica que a Instituição Credora encontrou
+                      alguma inconsistência na liquidação efetuada e que a
+                      Instituição Proponente deverá realizar ajustes conforme
+                      sugerido pela Instituição Credora para solucionar a
+                      pendência antes do cancelamento do pedido de portabilidade
+                      de crédito
+                    enum:
+                      - PENDING
+                      - RECEIVED
+                      - ACCEPTED_SETTLEMENT_IN_PROCESS
+                      - ACCEPTED_SETTLEMENT_COMPLETED
+                      - PORTABILITY_COMPLETED
+                      - REJECTED
+                      - CANCELLED
+                    example: RECEIVED
+                  createdAt:
+                    type: string
+                    format: date-time
+                    maxLength: 28
+                    description: Carimbo do tempo do momento da criação do registro
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    maxLength: 28
+                    description: >-
+                      Carimbo do tempo do momento da última atualização do
+                      registro
+                  status:
+                    type: string
+                    description: >-
+                      Informa o status do registro de reporte.
+
+
+                      DISCARDED: O status DISCARDED indica que o reporte enviado
+                      pelo participante foi rejeitado pela PCM. O motivo do
+                      descarte será enviado com a resposta, podendo ser por
+                      conta de um reporte inválido ou por um erro no
+                      processamento. Não é possível modificar um reporte
+                      DISCARDED, portanto o reportador deverá corrigir o
+                      registro que apresentou erro e reenviar via POST.
+
+                      SINGLE: O status SINGLE indica que o reporte em questão
+                      não tem uma contraparte. Ele é utilizado em casos onde a
+                      conciliação entre dois reportes não é possível.
+
+                      ACCEPTED: O status ACCEPTED indica que a validação de
+                      formato do reporte não tem erros e este será enviado para
+                      processamento.
+
+                      UNPAIRED: O status UNPAIRED significa que o reporte atual
+                      não possui uma correspondência em outro reporte através do
+                      atributo fapiInteractionId. Indica um reporte divergente.
+
+                      PAIRED_INCONSISTENT: O status PAIRED_INCONSISTENT
+                      significa que o reporte corrente possui uma contraparte
+                      com o mesmo fapiInteractionId, mas os demais dados estão
+                      inconsistentes. Indica um reporte divergente.
+
+                      PAIRED: Indica que o reporte tem uma contraparte com o
+                      mesmo fapiInteractionId e os demais dados estão
+                      conciliados. Representa o estado final desejado em um
+                      fluxo correto.
           headers: {}
       security:
         - bearer: []
@@ -3687,8 +3805,6 @@ components:
               description: >-
                 Identificador único e criptograficamente seguro do token
                 utilizado no consumo da API.
-          required:
-            - paymentReference
     ServerReportRequest:
       description: >-
         Representa os dados que deverão ser enviados para a inclusão de reportes
@@ -5401,7 +5517,7 @@ components:
         type: object
         properties:
           reportId:
-            description: Identificator único interno do reporte no formato UUID v4.
+            description: Identificador único interno do reporte no formato UUID v4.
             type: string
             format: uuid
             maxLength: 36
