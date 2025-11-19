@@ -1,7 +1,86 @@
 openapi: 3.0.1
 info:
   title: PCM-OpenApi
-  description: ''
+  description: >
+    # Introdução
+
+
+    A Plataforma de Coleta de Métricas foi idealizada para contabilizar as
+    interações entre as instituições participantes, de modo a promover um
+    ambiente equitativo e não discriminatório. Se trata de uma Plataforma
+    localizada no perímetro central, gerida pelo regulador do ecossistema.
+
+
+    ## Motivação
+
+
+    Para que o ecossistema do Open Finance Brasil seja saudável para
+    instituições e clientes finais, fez-se necessária a criação de uma
+    Plataforma que deverá concentrar dados sobre as chamadas que as instituições
+    fazem umas às outras. Dessa forma, permite-se coletar informações visando
+    criar métricas e indicadores a fim de se ter visibilidade sobre todo o
+    ambiente.
+
+
+    No intuito de manter a integridade e consistência nos dados, o envio destes
+    pelas instituições deverá passar por um processo de conciliação. Quando
+    divergente, as instituições serão notificadas e terão a possibilidade de
+    ajustar os reportes, o que promove um ambiente saudável de autorregulação,
+    prevenindo assim uma disputa.
+
+
+    ## O que a Plataforma não é
+
+
+    A Plataforma recebe os dados de maneira póstuma, ou seja, dentro do período
+    de fechamento, mas após a chamada concreta ter sido feita. Dada essa
+    natureza, a Plataforma não pode atuar como um agente que proíbe, bloqueia ou
+    interfere nas interações entre as instituições.
+
+
+    Por mais que concentre informações importantes das chamadas entre as
+    instituições, a Plataforma não é uma ferramenta de BI, e o controle de
+    acesso aos dados é feito em diferentes níveis (participante, regulador e
+    administrador).
+
+
+    ## Premissas Técnicas
+
+
+    * Tanto o envio por parte dos participantes quanto o processamento por parte
+    da Plataforma serão feitos de maneira assíncrona;
+
+
+    ## Terminologia
+
+
+    * **Server e Client**: em uma interação, a parte que solicita os dados é
+    chamada de _client_, ao passo que a parte que devolve os dados é o _server_.
+    O ponto de vista para o uso dessa terminologia é o tráfego dos dados da
+    transação e não o ponto de partida da chamada. Portanto, supondo que A faça
+    uma consulta em B pelos dados de uma conta, esses dados vão ser transmitidos
+    por quem recebeu a solicitação, e recebidos por quem a fez, nesse caso, "A"
+    é o Client e "B" é o Server.
+
+
+    * **Reporte**: no contexto da API de Coleta de Métricas, um _reporte_ é o
+    registro da chamada que será enviado tanto pelo server quanto pelo client.
+    Esse registro será armazenado na Plataforma para posterior processo de
+    conciliação de chamadas e extração de dados estatísticos.
+
+
+    * **Divergência**: Quando Server e Client enviam reportes, cada um destes
+    reportes se refere a uma chamada em específico. Nos casos em que uma das
+    partes não envia o reporte sobre essa chamada em específico, é caracterizada
+    uma divergência. As divergências podem ser resolvidas pela chamada às
+    operações de modificação de reportes em suas respectivas APIs. Uma
+    divergência é considerada fechada apenas quando todos os reportes encontram
+    sua respectiva correspondência do outro lado da chamada.
+
+
+
+    Para informações detalhadas sobre a PCM, consulte o [site da documentação da
+    Plataforma](https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/17378055/Plataforma+de+Coleta+de+M+tricas).
   version: 1.0.0
 tags:
   - name: Private API
@@ -106,15 +185,24 @@ paths:
                 maxItems: 5000
                 items:
                   $ref: '#/components/schemas/ReportResponse'
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf
-                  status: ACCEPTED
-                - reportId: 4095388d-f44f-499a-a9a7-2dbffce1bb8a
-                  correlationId: 8qPzRL4nBzesCc3H1827UlqqEuTT4F5lN82DuJllcnL5VnnY5j
-                  status: ACCEPTED
-                - reportId: 0f3fcceb-39f6-41b4-a75d-8444244bd836
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 4095388d-f44f-499a-a9a7-2dbffce1bb8a
+                    correlationId: 8qPzRL4nBzesCc3H1827UlqqEuTT4F5lN82DuJllcnL5VnnY5j
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 0f3fcceb-39f6-41b4-a75d-8444244bd836
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -136,7 +224,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReportResponse'
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
@@ -148,7 +236,7 @@ paths:
                       status: ACCEPTED
                     - reportId: 0f3fcceb-39f6-41b4-a75d-8444244bd836
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos registros com falha
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
@@ -160,7 +248,7 @@ paths:
                     - reportId: 0f3fcceb-39f6-41b4-a75d-8444244bd836
                       status: DISCARDED
                       message: 'Missing fields: ''fapiInteractionId'''
-                '4':
+                '6':
                   summary: Campo obrigatório não enviado
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a,
@@ -272,6 +360,7 @@ paths:
           in: path
           description: ''
           required: true
+          example: ''
           schema:
             type: string
       responses:
@@ -373,13 +462,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReportResponse'
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -465,7 +563,7 @@ paths:
                   - reportId
                   - status
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -479,7 +577,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos registros com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -602,13 +700,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HybridFlowReportResponse'
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -673,7 +780,7 @@ paths:
                   - reportId
                   - status
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -687,7 +794,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos os registros com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -854,13 +961,22 @@ paths:
                 required:
                   - reportId
                   - status
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -929,7 +1045,7 @@ paths:
                   - reportId
                   - status
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -943,7 +1059,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos os registros com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1128,13 +1244,22 @@ paths:
                 required:
                   - reportId
                   - status
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -1199,7 +1324,7 @@ paths:
                   - reportId
                   - status
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1213,7 +1338,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos os registros com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1399,13 +1524,22 @@ paths:
                 required:
                   - reportId
                   - status
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -1470,7 +1604,7 @@ paths:
                   - reportId
                   - status
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1484,7 +1618,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos os registros com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1652,13 +1786,22 @@ paths:
                 required:
                   - reportId
                   - status
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -1723,7 +1866,7 @@ paths:
                   - reportId
                   - status
               examples:
-                '2':
+                '4':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1737,7 +1880,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '3':
+                '5':
                   summary: Todos os registros com falha
                   value:
                     - reportId: d73b3296-29fb-463a-b6ea-0a8844d5557f
@@ -1865,21 +2008,25 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/OpendataReportRequest'
-            example:
-              - endpoint: /open-banking/channels/v1/electronic-channels
-                statusCode: 200
-                httpMethod: GET
-                timestamp: '2021-11-11T18:08:08.421Z'
-                processTimespan: 120
-                additionalInfo:
-                  clientIp: 192.168.10.11
-              - endpoint: /open-banking/channels/v1/electronic-channels
-                statusCode: 200
-                httpMethod: GET
-                timestamp: '2021-11-11T18:08:08.421Z'
-                processTimespan: 120
-                additionalInfo:
-                  clientIp: 192.168.10.11
+            examples:
+              Request Valido:
+                value:
+                  - endpoint: /open-banking/channels/v1/electronic-channels
+                    statusCode: 200
+                    httpMethod: GET
+                    timestamp: '2021-11-11T18:08:08.421Z'
+                    processTimespan: 120
+                    additionalInfo:
+                      clientIp: 192.168.10.11
+                  - endpoint: /open-banking/channels/v1/electronic-channels
+                    statusCode: 200
+                    httpMethod: GET
+                    timestamp: '2021-11-11T18:08:08.421Z'
+                    processTimespan: 120
+                    additionalInfo:
+                      clientIp: 192.168.10.11
+                summary: Request Valido
+                description: O request apresentado tem todos os campos validados.
       responses:
         '200':
           description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
@@ -1890,11 +2037,17 @@ paths:
                 maxItems: 5000
                 items:
                   $ref: '#/components/schemas/ReportResponse'
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 4095388d-f44f-499a-a9a7-2dbffce1bb8a
-                  status: ACCEPTED
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 4095388d-f44f-499a-a9a7-2dbffce1bb8a
+                    status: ACCEPTED
           headers: {}
         '207':
           description: >-
@@ -1916,7 +2069,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReportResponse'
               examples:
-                '2':
+                '3':
                   summary: Primeiro registro com falha
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
@@ -1926,7 +2079,7 @@ paths:
                       status: ACCEPTED
                     - reportId: 0f3fcceb-39f6-41b4-a75d-8444244bd836
                       status: ACCEPTED
-                '3':
+                '4':
                   summary: Todos registros com falha
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
@@ -2040,23 +2193,27 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ConsentsStockRequest'
-            example:
-              date: '2021-11-11'
-              orgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
-              role: CLIENT
-              scope: DADOS
-              totalCustomerPF: 100
-              totalCustomerPJ: 85
-              consentsStockList:
-                - clientOrgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                  serverOrgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
-                  totalActiveConsents: 70
-                - clientOrgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                  serverOrgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
-                  totalActiveConsents: 70
-                - clientOrgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                  serverOrgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
-                  totalActiveConsents: 70
+            examples:
+              Request Valido:
+                value:
+                  date: '2021-11-11'
+                  orgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
+                  role: CLIENT
+                  scope: DADOS
+                  totalCustomerPF: 100
+                  totalCustomerPJ: 85
+                  consentsStockList:
+                    - clientOrgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                      serverOrgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
+                      totalActiveConsents: 70
+                    - clientOrgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                      serverOrgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
+                      totalActiveConsents: 70
+                    - clientOrgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                      serverOrgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
+                      totalActiveConsents: 70
+                summary: Request Valido
+                description: O request apresentado tem todos os campos validados.
       responses:
         '200':
           description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
@@ -2070,234 +2227,6 @@ paths:
           headers: {}
         '400':
           description: O formato do corpo da requisição não é um objeto.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: 'Invalid payload format: MUST be an array'
-          headers: {}
-        '401':
-          description: >-
-            Ocorre quando uma requisição não é autorizada pelo gateway, e
-            acontece quando o token não é enviado ou está inválido.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Unauthorized
-          headers: {}
-        '403':
-          description: >-
-            Ocorre quando um cliente já previamente identificado (autenticado)
-            não é autorizado a acessar um determinado recurso.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Forbidden
-          headers: {}
-        '406':
-          description: >-
-            Ocorre quando um cliente espera uma resposta diferente de
-            application/json usando o header Accept
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Content type not accepted
-          headers: {}
-        '413':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Record limit exceeded
-          headers: {}
-        '415':
-          description: >-
-            Ocorre quando uma requisição envia um Content Type diferente de
-            application/json
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Unsupported Media Type
-          headers: {}
-        '429':
-          description: >-
-            Ocorre quando o servidor atinge o limite de requisições (atualmente,
-            300 req/s).
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Too Many Requests
-          headers: {}
-        '500':
-          description: É devolvido quando ocorre um erro não identificado no servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericError'
-              example:
-                message: Internal Server Error
-          headers: {}
-      security:
-        - bearer: []
-  /report-api/v1/credit-portabilities/d78fc4e5-37ca-4da3-adf2-9b082bf92285:
-    get:
-      summary: Untitled Endpoint
-      deprecated: false
-      description: ''
-      tags: []
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-          headers: {}
-      security:
-        - bearer: []
-  /report-api/v1/credit-portabilities/server:
-    post:
-      summary: Inclusão de reports de credit portability para server
-      deprecated: false
-      description: >-
-        A API de Portabilidade de Crédito fornece operações que permitem a
-        inclusão de reportes relativos ao processo de solicitação de
-        Portabilidade de Crédito entre instituições do ecossistema do Open
-        Finance.
-      operationId: add-credit-portability-server
-      tags:
-        - Credit Portability API
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/CreditPortabilityServerRequest'
-            example:
-              - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                httpMethod: POST
-                statusCode: 200
-                timestamp: '2021-11-11T18:08:08.894Z'
-                processTimespan: 120
-                clientOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                serverOrgId: 5ec47c83-9010-4540-91ad-b820ef0df04a
-                role: SERVER
-                status: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELED
-                rejectedBy: CREDORA
-              - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                httpMethod: POST
-                statusCode: 200
-                timestamp: '2021-11-11T18:08:08.894Z'
-                processTimespan: 120
-                clientOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                serverOrgId: 5ec47c83-9010-4540-91ad-b820ef0df04a
-                role: SERVER
-                status: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELED
-                rejectedBy: CREDORA
-              - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                httpMethod: POST
-                statusCode: 200
-                timestamp: '2021-11-11T18:08:08.894Z'
-                processTimespan: 120
-                clientOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                serverOrgId: 5ec47c83-9010-4540-91ad-b820ef0df04a
-                role: SERVER
-                status: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELED
-                rejectedBy: CREDORA
-      responses:
-        '200':
-          description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReportResponse'
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-          headers: {}
-        '207':
-          description: >-
-            O status 207 (Multi-Status) informa ao solicitante que o formato da
-            requisição está correto, mas que entradas do array contém erro de
-            validação em pelo menos 1 item. Ou seja, se todos os elementos do
-            array informado estiverem com falha de validação, a operação vai
-            devolver o status 207, e no corpo da resposta todos os elementos do
-            array vão estar com status DISCARDED e com sua respectiva mensagem.
-
-
-            A operação vai devolver um array com todos os resultados, e garante
-            que ele esteja na mesma ordem do array da requisição.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReportResponse'
-              examples:
-                '10':
-                  summary: Primeiro registro com falha
-                  value:
-                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                      correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                      status: DISCARDED
-                      message: fapiInteractionId must be a UUID
-                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                      correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                      status: ACCEPTED
-                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                      correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                      status: ACCEPTED
-                '11':
-                  summary: Todos os registros com falha
-                  value: "[\r\n  {\r\n    \"reportId\": \"424ad55c-36cc-4077-b85e-c22ea984cc4a\",\r\n    \"correlationId\": \"wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf\",\r\n    \"status\": \"DISCARDED\",\r\n    \"message\": \"Missing fields: 'fapiInteractionId'\"\r\n  },\r\n  {\r\n    \"reportId\": \"424ad55c-36cc-4077-b85e-c22ea984cc4b\",\r\n    \"correlationId\": \"wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf\",\r\n    \"status\": \"DISCARDED\",\r\n    \"message\": \"Missing fields: 'fapiInteractionId'\"\r\n  },\r\n  {\r\n    \"reportId\": \"424ad55c-36cc-4077-b85e-c22ea984cc4c\",\r\n    \"correlationId\": \"wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf\",\r\n    \"status\": \"DISCARDED\",\r\n    \"message\": \"Missing fields: 'fapiInteractionId'\"\r\n  },\r\n]"
-                '12':
-                  summary: Campo obrigatório não enviado
-                  value:
-                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a,
-                      correlationId: wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf,
-                      status: DISCARDED,
-                      message: 'Missing fields: ''statusCode'''
-          headers: {}
-        '400':
-          description: O formato do corpo da requisição não é um array.
           content:
             application/json:
               schema:
@@ -2399,79 +2328,107 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/CreditPortabilityClientRequest'
-            example:
-              - timestamp: '2021-11-11T18:08:08.278Z'
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                statusCode: 200
-                httpMethod: POST
-                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                processTimespan: 120
-                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                role: CLIENT
-                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                creationDateTime: '2020-07-21T08:30:00Z'
-                creditPortabilityStatus: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELADO_PELO_CLIENTE
-                rejectedBy: PROPONENTE
-              - timestamp: '2021-11-11T18:08:08.278Z'
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                statusCode: 200
-                httpMethod: POST
-                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                processTimespan: 120
-                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                role: CLIENT
-                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                creationDateTime: '2020-07-21T08:30:00Z'
-                creditPortabilityStatus: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELADO_PELO_CLIENTE
-                rejectedBy: PROPONENTE
-              - timestamp: '2021-11-11T18:08:08.278Z'
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                statusCode: 200
-                httpMethod: POST
-                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                processTimespan: 120
-                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                role: CLIENT
-                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                creationDateTime: '2020-07-21T08:30:00Z'
-                creditPortabilityStatus: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELADO_PELO_CLIENTE
-                rejectedBy: PROPONENTE
-              - timestamp: '2021-11-11T18:08:08.278Z'
-                fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
-                clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
-                clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
-                serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
-                endpoint: /credit-operations/{contractId}/portability-eligibility
-                statusCode: 200
-                httpMethod: POST
-                correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
-                processTimespan: 120
-                endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
-                role: CLIENT
-                portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
-                creationDateTime: '2020-07-21T08:30:00Z'
-                creditPortabilityStatus: PENDING
-                statusUpdateDateTime: '2020-07-21T08:30:00Z'
-                rejectionReason: CANCELADO_PELO_CLIENTE
-                rejectedBy: PROPONENTE
+            examples:
+              Request Valido:
+                value:
+                  - timestamp: '2021-11-11T18:08:08.278Z'
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    statusCode: 200
+                    httpMethod: POST
+                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                    processTimespan: 120
+                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                    role: CLIENT
+                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                    contractId: '92792126019929279212650822221989319252576'
+                    creationDateTime: '2020-07-21T08:30:00Z'
+                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                    originalContractCET: '0.290000'
+                    originalPropositionCET: '0.290000'
+                    originalContractTerm: 57
+                    propositionTerm: 30
+                    creditPortabilityStatus: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELADO_PELO_CLIENTE
+                    rejectedBy: PROPONENTE
+                  - timestamp: '2021-11-11T18:08:08.278Z'
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    statusCode: 200
+                    httpMethod: POST
+                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                    processTimespan: 120
+                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                    role: CLIENT
+                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                    contractId: '92792126019929279212650822221989319252576'
+                    creationDateTime: '2020-07-21T08:30:00Z'
+                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                    originalContractCET: '0.290000'
+                    originalPropositionCET: '0.290000'
+                    originalContractTerm: 57
+                    propositionTerm: 30
+                    creditPortabilityStatus: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELADO_PELO_CLIENTE
+                    rejectedBy: PROPONENTE
+                  - timestamp: '2021-11-11T18:08:08.278Z'
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    statusCode: 200
+                    httpMethod: POST
+                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                    processTimespan: 120
+                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                    role: CLIENT
+                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                    contractId: '92792126019929279212650822221989319252576'
+                    creationDateTime: '2020-07-21T08:30:00Z'
+                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                    originalContractCET: '0.290000'
+                    originalPropositionCET: '0.290000'
+                    originalContractTerm: 57
+                    propositionTerm: 30
+                    creditPortabilityStatus: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELADO_PELO_CLIENTE
+                    rejectedBy: PROPONENTE
+                  - timestamp: '2021-11-11T18:08:08.278Z'
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    clientSSId: ca0d518b-0e95-42d4-9fc8-0598ff9023af
+                    clientOrgId: e6e7c657-4d6d-46d9-a78b-76cc02495cf5
+                    serverOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    statusCode: 200
+                    httpMethod: POST
+                    correlationId: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
+                    processTimespan: 120
+                    endpointUriPrefix: https://openbanking.instituicao-1.com.br/opbk
+                    role: CLIENT
+                    portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+                    contractId: '92792126019929279212650822221989319252576'
+                    creationDateTime: '2020-07-21T08:30:00Z'
+                    productSubTypeCategory: CREDITO_PESSOAL_CLEAN
+                    originalContractCET: '0.290000'
+                    originalPropositionCET: '0.290000'
+                    originalContractTerm: 57
+                    propositionTerm: 30
+                    creditPortabilityStatus: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELADO_PELO_CLIENTE
+                    rejectedBy: PROPONENTE
+                summary: Request Valido
+                description: O request apresentado tem todos os campos validados.
       responses:
         '200':
           description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
@@ -2494,7 +2451,7 @@ paths:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                       status: ACCEPTED
-                '11':
+                '2':
                   summary: Todos os registros com falha
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
@@ -2509,7 +2466,7 @@ paths:
                       correlationId: wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf
                       status: DISCARDED
                       message: 'Missing fields: ''fapiInteractionId'''
-                '12':
+                '3':
                   summary: Campo obrigatório não enviado
                   value:
                     - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a,
@@ -2535,17 +2492,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReportResponse'
-              example:
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: DISCARDED
-                  message: fapiInteractionId must be a UUID
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
-                - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
-                  status: ACCEPTED
+              examples:
+                '4':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: DISCARDED
+                    message: fapiInteractionId must be a UUID
+                '5':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '6':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
           headers: {}
         '400':
           description: O formato do corpo da requisição não é um array.
@@ -2631,6 +2597,247 @@ paths:
           headers: {}
       security:
         - bearer: []
+  /report-api/v1/credit-portabilities/server:
+    post:
+      summary: Inclusão de reports de credit portability para server
+      deprecated: false
+      description: >-
+        A API de Portabilidade de Crédito fornece operações que permitem a
+        inclusão de reportes relativos ao processo de solicitação de
+        Portabilidade de Crédito entre instituições do ecossistema do Open
+        Finance.
+      operationId: add-credit-portability-server
+      tags:
+        - Credit Portability API
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreditPortabilityServerRequest'
+            examples:
+              Request Valido:
+                value:
+                  - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    httpMethod: POST
+                    statusCode: 200
+                    timestamp: '2021-11-11T18:08:08.894Z'
+                    processTimespan: 120
+                    clientOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    serverOrgId: 5ec47c83-9010-4540-91ad-b820ef0df04a
+                    role: SERVER
+                    status: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELED
+                    rejectedBy: CREDORA
+                  - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    httpMethod: POST
+                    statusCode: 200
+                    timestamp: '2021-11-11T18:08:08.894Z'
+                    processTimespan: 120
+                    clientOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    serverOrgId: 5ec47c83-9010-4540-91ad-b820ef0df04a
+                    role: SERVER
+                    status: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELED
+                    rejectedBy: CREDORA
+                  - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    fapiInteractionId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
+                    endpoint: /credit-operations/{contractId}/portability-eligibility
+                    httpMethod: POST
+                    statusCode: 200
+                    timestamp: '2021-11-11T18:08:08.894Z'
+                    processTimespan: 120
+                    clientOrgId: c3779651-c918-48b1-b1fb-e36ba76cb036
+                    serverOrgId: 5ec47c83-9010-4540-91ad-b820ef0df04a
+                    role: SERVER
+                    status: PENDING
+                    statusUpdateDateTime: '2020-07-21T08:30:00Z'
+                    rejectionReason: CANCELED
+                    rejectedBy: CREDORA
+                summary: Request Valido
+                description: O request apresentado tem todos os campos validados.
+      responses:
+        '200':
+          description: "\t\nO status 200 representa a situação onde todos os registros enviados no lote foram validados e serão direcionados para processamento. Se pelo menos 1 registro contiver problemas de validação, o retorno será 207 (veja descrição do status).\n\nA operação vai devolver um array com todos os resultados, e garante que ele esteja na mesma ordem do array da requisição."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportResponse'
+              examples:
+                '1':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '2':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+                '3':
+                  summary: Sucesso
+                  value:
+                    reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                    status: ACCEPTED
+          headers: {}
+        '207':
+          description: >-
+            O status 207 (Multi-Status) informa ao solicitante que o formato da
+            requisição está correto, mas que entradas do array contém erro de
+            validação em pelo menos 1 item. Ou seja, se todos os elementos do
+            array informado estiverem com falha de validação, a operação vai
+            devolver o status 207, e no corpo da resposta todos os elementos do
+            array vão estar com status DISCARDED e com sua respectiva mensagem.
+
+
+            A operação vai devolver um array com todos os resultados, e garante
+            que ele esteja na mesma ordem do array da requisição.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportResponse'
+              examples:
+                '4':
+                  summary: Primeiro registro com falha
+                  value:
+                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                      correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                      status: DISCARDED
+                      message: fapiInteractionId must be a UUID
+                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                      correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                      status: ACCEPTED
+                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                      correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
+                      status: ACCEPTED
+                '5':
+                  summary: Todos os registros com falha
+                  value: "[\r\n  {\r\n    \"reportId\": \"424ad55c-36cc-4077-b85e-c22ea984cc4a\",\r\n    \"correlationId\": \"wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf\",\r\n    \"status\": \"DISCARDED\",\r\n    \"message\": \"Missing fields: 'fapiInteractionId'\"\r\n  },\r\n  {\r\n    \"reportId\": \"424ad55c-36cc-4077-b85e-c22ea984cc4b\",\r\n    \"correlationId\": \"wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf\",\r\n    \"status\": \"DISCARDED\",\r\n    \"message\": \"Missing fields: 'fapiInteractionId'\"\r\n  },\r\n  {\r\n    \"reportId\": \"424ad55c-36cc-4077-b85e-c22ea984cc4c\",\r\n    \"correlationId\": \"wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf\",\r\n    \"status\": \"DISCARDED\",\r\n    \"message\": \"Missing fields: 'fapiInteractionId'\"\r\n  },\r\n]"
+                '6':
+                  summary: Campo obrigatório não enviado
+                  value:
+                    - reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a,
+                      correlationId: wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf,
+                      status: DISCARDED,
+                      message: 'Missing fields: ''statusCode'''
+          headers: {}
+        '400':
+          description: O formato do corpo da requisição não é um array.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: 'Invalid payload format: MUST be an array'
+          headers: {}
+        '401':
+          description: >-
+            Ocorre quando uma requisição não é autorizada pelo gateway, e
+            acontece quando o token não é enviado ou está inválido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Unauthorized
+          headers: {}
+        '403':
+          description: >-
+            Ocorre quando um cliente já previamente identificado (autenticado)
+            não é autorizado a acessar um determinado recurso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Forbidden
+          headers: {}
+        '406':
+          description: >-
+            Ocorre quando um cliente espera uma resposta diferente de
+            application/json usando o header Accept
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Content type not accepted
+          headers: {}
+        '413':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Record limit exceeded
+          headers: {}
+        '415':
+          description: >-
+            Ocorre quando uma requisição envia um Content Type diferente de
+            application/json
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Unsupported Media Type
+          headers: {}
+        '429':
+          description: >-
+            Ocorre quando o servidor atinge o limite de requisições (atualmente,
+            300 req/s).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Too Many Requests
+          headers: {}
+        '500':
+          description: É devolvido quando ocorre um erro não identificado no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              example:
+                message: Internal Server Error
+          headers: {}
+      security:
+        - bearer: []
+  /report-api/v1/credit-portabilities/d78fc4e5-37ca-4da3-adf2-9b082bf92285:
+    get:
+      summary: Consulta de um report de credit portability
+      deprecated: false
+      description: ''
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
   /token/:
     post:
       summary: Token de autênticação
@@ -2650,11 +2857,11 @@ paths:
                   type: string
                   example: '{{client_id}}882ba573-787b-4462-bbd9-e3b39324aca7'
                 client_secret:
+                  type: string
                   example: 882ba573-787b-4462-bbd9-e3b39324aca7
-                  type: string
                 grant_type:
-                  example: client_credentials
                   type: string
+                  example: client_credentials
       responses:
         '200':
           description: ''
@@ -2674,7 +2881,7 @@ paths:
                     token_type: Bearer
                     not-before-policy: 0
                     scope: profile email
-                '4':
+                '2':
                   summary: Cliente não autorizado
                   value:
                     statusCode: 401
@@ -2695,12 +2902,12 @@ paths:
                   - error
                   - error_description
               examples:
-                '2':
+                '3':
                   summary: Grant type ausente
                   value:
                     error: unsupported_grant_type
                     error_description: Unsupported grant_type
-                '5':
+                '4':
                   summary: Credenciais ausentes
                   value:
                     error: invalid_client
@@ -2768,6 +2975,7 @@ paths:
           in: path
           description: ''
           required: true
+          example: ''
           schema:
             type: string
       responses:
@@ -2777,6 +2985,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentStatusGetResponse'
+          headers: {}
+      security:
+        - bearer: []
+  /report-api/v2/report:
+    post:
+      summary: Untitled Endpoint
+      deprecated: false
+      description: ''
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
           headers: {}
       security:
         - bearer: []
@@ -2828,6 +3054,9 @@ components:
             para ser considerado válido. Nesse campo não deve ser utilizado o
             path da requisição original, uma vez que ao comparar com os valores
             dessa enum, ele não será considerado válido.
+
+            A lista de endpoints aceitos pela PCM pode ser encontrada em
+            https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/1069350926/Endpoints+aceitos+pela+PCM
           format: uri
           example: /open-banking/consents/v2/consents
         statusCode:
@@ -2985,12 +3214,20 @@ components:
                 "PJ", se não estiver então preencher com "PF"
               type: string
             localInstrument:
+              type: string
               description: >-
                 Especifica a forma de iniciação do pagamento.
 
                 Deve ser preenchido com a mesma string informada no payload
                 ".data.localInstrument"
-              type: string
+              enum:
+                - MANU
+                - DICT
+                - INIC
+                - AUTO
+                - QRDN
+                - QRES
+              example: MANU
             status:
               description: >-
                 Registra os códigos de erro detalhados de uma requisição que
@@ -3055,15 +3292,8 @@ components:
                 Descreve como o autenticador (por exemplo, um dispositivo FIDO)
                 está anexado ao cliente que realiza a autenticação (ex: platform
                 para autenticadores integrados como Face ID ou cross-platform
-                para chaves de segurança USB)."
-
-                10. platform: incluir na descrição "Identifica a plataforma
-                utilizada.
-
-                Deve ser preenchido com a mesma string definida em
-                ".data.authenticatorAttachment".  Não havendo string, deve ser
-                explicitamente enviada esse additionalInfo como sendo uma string
-                vazia.
+                para chaves de segurança USB). Deve ser preenchido com a mesma
+                string definida em ".data.authenticatorAttachment".
               type: string
             platform:
               description: >-
@@ -3117,6 +3347,7 @@ components:
                 - SCHEDULED
                 - RECURRENT
                 - SWEEPING
+                - AUTOMATIC
             dropReason:
               description: >-
                 Regras:
@@ -3201,14 +3432,14 @@ components:
 
 
                 Preencher com o valor do campo "interval"​
-              enum:
-                - FIXO
-                - VARIAVEL
             amountType:
               type: string
               description: >-
                 Valida se o serviço contratado possui maior conversão em relação
                 ao tipo do valor definido, sendo ele fixo ou variável​.
+              enum:
+                - FIXO
+                - VARIAVEL
             isFirstPayment:
               type: string
               description: Valida se o serviço possui um pagamento associado na adesão.
@@ -3248,6 +3479,15 @@ components:
 
                 Para Pagamentos Automáticos v2: Preencher com o valor do campo
                 "/data/recurringPaymentId"​
+            paymentReference:
+              type: string
+              description: >-
+                Identifica a referência do pagamento no tempo (semanal, mensal,
+                trimestral...).
+
+                Regras:​
+
+                Preencher com o valor do campo "paymentReference"
             originalRecurringPaymentId:
               type: string
               description: >-
@@ -3329,22 +3569,17 @@ components:
               type: object
               properties:
                 available:
-                  type: number
+                  type: string
                   description: Disponível
                 unavailable:
-                  type: number
+                  type: string
                   description: Indisponível
                 temporarilyUnavailable:
-                  type: number
+                  type: string
                   description: Temporariamente indisponível
                 pendingAuthorisation:
-                  type: number
+                  type: string
                   description: Pendente de autorização
-              required:
-                - available
-                - unavailable
-                - temporarilyUnavailable
-                - pendingAuthorisation
               description: Sumarização das quantidades de reportes por status
             companyProfileInfo:
               type: object
@@ -3420,6 +3655,40 @@ components:
                 associados à recorrência
               title: ''
               example: '2025-09-01'
+            recurringConsentId:
+              type: string
+              description: Autorizar o consentimento para pix automáticos
+            journeyIsLinked:
+              type: string
+              description: >-
+                indica que o consentimento é vinculado a outro em Jornada
+                Otimizada
+            journeyLinkId:
+              type: string
+              description: >+
+                Identifica o consentimento de dados vinculado a uma Jornada
+                Otimizada. Deve ser preenchido com a mesma string enviada ou
+                recebida no campo “.data.journey.linkId”, retornado após a
+                chamada inicial na API “POST /enrollments” em caso de Jornada
+                Otimizada.
+
+            authorisationFlowIntent:
+              type: string
+              description: >-
+                Identificar o fluxo de autorização através do campo adicional de
+                intenção do fluxo de autorização
+              enum:
+                - HYBRID_FLOW
+                - 'CIBA_FLOW '
+                - FIDO_FLOW
+              example: HYBRID_FLOW
+            tokenId:
+              type: string
+              description: >-
+                Identificador único e criptograficamente seguro do token
+                utilizado no consumo da API.
+          required:
+            - paymentReference
     ServerReportRequest:
       description: >-
         Representa os dados que deverão ser enviados para a inclusão de reportes
@@ -3542,6 +3811,7 @@ components:
           type: object
           properties:
             dropReason:
+              type: string
               description: >-
                 Regras:
 
@@ -3584,7 +3854,11 @@ components:
                 autenticação do Hybrid Flow - exemplo: consentimento criado para
                 um CPF e autenticado por outro; criado para um CNPJ e
                 autenticado por CPF sem relação com o CNPJ.
-              type: string
+              enum:
+                - NO_AUTHORITY
+                - NO_AUTHORITY_PERSON_MISMATCH
+                - NO_CREDENTIAL, NONE
+              example: NO_AUTHORITY
     ReportResponse:
       description: >-
         Representa os dados que serão retornados pelas operações de inclusão de
@@ -3596,7 +3870,7 @@ components:
       type: object
       properties:
         reportId:
-          description: Identificator único interno do reporte no formato UUID v4.
+          description: Identificador único interno do reporte no formato UUID v4.
           type: string
           format: uuid
           maxLength: 36
@@ -3729,12 +4003,13 @@ components:
           type: string
           description: >-
             Identificação do endpoint que foi utilizado na transação reportada.
-            A identificação do endpoint deve estar presente na lista de
-            endpoints aceitos pela PCM para ser considerado válido. Nesse campo
-            não deve ser utilizado o path da requisição original.
+            A identificação do endpoint deve estar entre as entradas desse enum
+            para ser considerado válido. Nesse campo não deve ser utilizado o
+            path da requisição original, uma vez que ao comparar com os valores
+            dessa enum, ele não será considerado válido.
 
             A lista de endpoints aceitos pela PCM pode ser encontrada em
-            https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/43089921/Tabela+de+endpoints+aceitos+pela+PCM
+            https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/1069350926/Endpoints+aceitos+pela+PCM
           example: /open-banking/opendata-acquiring-services/v1/businesses
         statusCode:
           description: Status de retorno HTTP da solicitação.
@@ -3772,100 +4047,14 @@ components:
         additionalInfo:
           type: object
           properties:
-            paymentType:
+            clientIp:
+              type: string
+              description: Endereço IP do cliente que efetuou a chamada
+            tokenId:
               type: string
               description: >-
-                Identifica o modo de pagamento acionado no consentimento
-
-
-                Envio obrigatório para a role Client​
-
-                Conteudo ENUM do novo campo varia de acordo com o endpoint
-                conforme tabela abaixo
-            amountType:
-              type: string
-              description: >-
-                Valida se o serviço contratado possui maior conversão em relação
-                ao tipo do valor definido, sendo ele fixo ou variável​.
-              enum:
-                - FIXO
-                - VARIAVEL
-            interval:
-              type: string
-              description: >-
-                Periodicidade que a recorrência foi definida (semanal,
-                trimestral, anual...)​.
-
-
-                Regras:
-
-
-                Preencher com o valor do campo "interval"​
-            isFirstPayment:
-              type: string
-              description: Valida se o serviço possui um pagamento associado na adesão.
-              enum:
-                - 'TRUE'
-                - 'FALSE'
-            hasMinimumAmount:
-              type: string
-              description: >-
-                Valida se possui o valor mínimo definido pelo usuário
-                recebedor​.
-            isRetryAccepted:
-              type: string
-              description: >-
-                Identifica se foi autorizado a tentativas de pagamento em dias
-                subsequentes na situação de falha do pagamento da recorrência
-
-
-                Regras:
-
-
-                Preencher com o valor do campo "isRetryAccepted"​
-            recurringPaymentId:
-              type: string
-              description: >-
-                Contagem de acionamentos feitos no pagamentos
-
-
-                Regras:
-
-
-                Para Pagamentos v4: Preencher com o valor do campo
-                "/data/paymentId"
-
-                Para Pagamentos Automáticos v2: Preencher com o valor do campo
-                "/data/recurringPaymentId"​
-            originalRecurringPaymentId:
-              type: string
-              description: >-
-                Identifica o primeiro pagamento da recorrência em relação as
-                retentativas​.
-
-
-                Regras:
-
-
-                Preencher com o valor do campo "originalRecurringPaymentId"​
-            paymentReference:
-              type: string
-              description: >-
-                Identifica a referência do pagamento no tempo (semanal, mensal,
-                trimestral...).
-
-
-                Regras:​
-
-
-                Preencher com o valor do campo "paymentReference"
-            cancellationReason:
-              type: string
-              description: |-
-                Identifica o estado que o pagamento estava quando foi cancelado​
-                Regras:
-
-                Preencher com o valor do campo "cancellation.reason"
+                Identificador único e criptograficamente seguro do token
+                utilizado no consumo da API.
           description: >-
             Informações adicionais sobre o reporte deste endpoint/método. Possui
             característica variável. As regras de preenchimento estão na
@@ -3935,7 +4124,7 @@ components:
           description: >-
             Total de clientes PF com consentimentos ativos. Formato: Númerico
             inteiro natural
-          default: 50
+          example: 50
         totalCustomerPJ:
           type: number
           description: >-
@@ -3957,12 +4146,11 @@ components:
                 example: d78fc4e5-37ca-4da3-adf2-9b082bf92280
               serverOrgId:
                 type: string
+                description: Identificador da organização para onde a chamada foi feita.
                 format: uuid
                 maxLength: 36
                 pattern: >-
-                  pattern:
                   ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-                description: Identificador da organização para onde a chamada foi feita.
                 example: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
               totalActiveConsents:
                 type: number
@@ -4028,13 +4216,14 @@ components:
       properties:
         timestamp:
           type: string
-          format: date-time
-          pattern: /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           description: >-
             Data/Hora UTC no formato ISO8601 com milissegundos
             (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada foi
             disparada, imediatamente antes do primeiro byte enviado na
             requisição.
+          format: date-time
+          pattern: >-
+            ^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$
           example: '2021-11-11T18:08:08.278Z'
         fapiInteractionId:
           type: string
@@ -4080,12 +4269,13 @@ components:
           type: string
           description: >-
             Identificação do endpoint que foi utilizado na transação reportada.
-            A identificação do endpoint deve estar presente na lista de
-            endpoints aceitos pela PCM para ser considerado válido. Nesse campo
-            não deve ser utilizado o path da requisição original.
+            A identificação do endpoint deve estar entre as entradas desse enum
+            para ser considerado válido. Nesse campo não deve ser utilizado o
+            path da requisição original, uma vez que ao comparar com os valores
+            dessa enum, ele não será considerado válido.
 
             A lista de endpoints aceitos pela PCM pode ser encontrada em
-            https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/43089921/Tabela+de+endpoints+aceitos+pela+PCM
+            https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/1069350926/Endpoints+aceitos+pela+PCM
           example: /open-banking/consents/v2/consents
         statusCode:
           type: integer
@@ -4096,15 +4286,6 @@ components:
             Status de retorno HTTP da solicitação. No caso de ocorrer um timeout
             client side preencher com um código 403 (conforme documentação ).
           example: 200
-        portabilityId:
-          type: string
-          format: uuid
-          maxLength: 100
-          minLength: 1
-          pattern: >-
-            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-          description: Código identificador do pedido de portabilidade realizado.
-          example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
         httpMethod:
           type: string
           description: Método HTTP da solicitação.
@@ -4115,6 +4296,27 @@ components:
             - DELETE
             - PATCH
           example: POST
+        endpointUriPrefix:
+          type: string
+          pattern: ^[- /:_.',0-9a-zA-Z]{0,200}$
+          maxLength: 200
+          description: >-
+            Endereço do servidor de destino da chamada, incluindo o prefixo
+            quando houver. O formato do campo deverá ser o seguinte:
+            https://{host}/{prefixo}, sendo:
+
+
+            host: endereço FQDN do servidor de destino
+
+            prefixo: toda a parte do path que vem antes da string /open-banking
+          example: https://openbanking.instituicao-1.com.br/opbk
+        consentId:
+          type: string
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+          description: Código identificador do pedido de portabilidade realizado.
+          example: b9b0ca92-3e97-4711-af1a-8a70fab0bb16
         correlationId:
           type: string
           pattern: ^[- /:_.',0-9a-zA-Z]{0,100}$
@@ -4133,39 +4335,23 @@ components:
             Tempo em milissegundos inteiros decorrido desde o registro do
             timestamp até a chegada do primeiro byte da resposta do server.
           example: 120
-        endpointUriPrefix:
+        portabilityId:
           type: string
-          pattern: ^[- /:_.',0-9a-zA-Z]{0,200}$
-          maxLength: 200
-          description: >-
-            Endereço do servidor de destino da chamada, incluindo o prefixo
-            quando houver. O formato do campo deverá ser o seguinte:
-            https://{host}/{prefixo}, sendo:
-
-
-            host: endereço FQDN do servidor de destino
-
-            prefixo: toda a parte do path que vem antes da string /open-banking
-          example: https://openbanking.instituicao-1.com.br/opbk
-        contractId:
-          type: string
-          minLength: 20
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-]{0,99}$
-          description: >-
-            Identifica de forma única o contrato da operação de crédito do
-            cliente, mantendo as regras de imutabilidade dentro da instituição
-            transmissora.
-          example: '92792126019929279212650822221989319252576'
+          description: Código identificador do pedido de portabilidade realizado.
+          format: uuid
+          maxLength: 100
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+          example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
         creationDateTime:
           type: string
-          pattern: >-
-            /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           description: >-
             Data e hora em que a Proponente registrou a presente proposta
             (chamada ao POST /portabilities). Uma string com data e hora
             conforme especificação ISO8601, sempre com a utilização de timezone
             UTC-0 (UTC time format).
+          pattern: >-
+            ^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$
           example: '2020-07-21T08:30:00Z'
         creditPortabilityStatus:
           type: string
@@ -4229,7 +4415,8 @@ components:
             com data e hora conforme especificação ISO-8601, sempre com a
             utilização de timezone UTC(UTC time format).
           pattern: >-
-            /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
+            ^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$
+          maxLength: 20
           example: '2020-07-21T08:30:00Z'
         rejectionReason:
           type: string
@@ -4262,6 +4449,11 @@ components:
             - USUARIO
             - CREDORA
           example: CREDORA
+        errorCode:
+          type: string
+          description: >-
+            Registra os códigos de erro detalhados de uma requisição que
+            resultou em um erro HTTP (série 4xx ou 5xx).
       required:
         - timestamp
         - fapiInteractionId
@@ -4332,20 +4524,15 @@ components:
           example: uGQHwNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf2
         timestamp:
           type: string
-          format: date-time
-          pattern: /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
           description: >-
             Data/Hora UTC no formato ISO8601 com milissegundos
             (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada foi
             disparada, imediatamente antes do primeiro byte enviado na
             requisição.
+          format: date-time
+          pattern: >-
+            ^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$
           example: '2021-11-11T18:08:08.278Z'
-        processTimespan:
-          type: integer
-          description: >-
-            Tempo em milissegundos inteiros decorrido desde o registro do
-            timestamp até a chegada do primeiro byte da resposta do server.
-          example: 120
         clientOrgId:
           type: string
           format: uuid
@@ -4365,10 +4552,18 @@ components:
         portabilityId:
           type: string
           description: Código identificador do pedido de portabilidade realizado.
-          minLength: 1
-          maxLength: 100
           format: uuid
+          maxLength: 100
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
+        consentId:
+          type: string
+          format: uuid
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+          description: Código identificador do pedido de portabilidade realizado.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         statusUpdateDateTime:
           type: string
           description: >-
@@ -4376,8 +4571,14 @@ components:
             com data e hora conforme especificação ISO-8601, sempre com a
             utilização de timezone UTC(UTC time format).
           pattern: >-
-            /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$/
+            ^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][01]\d:[0-5]\d)$
           example: '2020-07-21T08:30:00Z'
+        processTimespan:
+          type: integer
+          description: >-
+            Tempo em milissegundos inteiros decorrido desde o registro do
+            timestamp até a chegada do primeiro byte da resposta do server.
+          example: 120
         rejectionReason:
           type: string
           description: >-
@@ -4464,6 +4665,9 @@ components:
             - CANCELLED
             - PAYMENT_ISSUE
           example: RECEIVED
+        errorCode:
+          type: string
+          description: Código de erro.
       required:
         - fapiInteractionId
         - endpoint
@@ -4514,7 +4718,7 @@ components:
             telefone, etc.) porém o aceite só deverá ser valido se o cliente
             aprovar no canal digital da instituição credora
 
-            ACCEPTED_SETTLEMENT_IN_PROGRESS: Indica que a contraproposta não foi
+            ACCEPTED_SETTLEMENT_IN_PROCESS: Indica que a contraproposta não foi
             aceita pelo cliente e a instituição proponente terá que quitar o
             valor do contrato no mesmo dia em que o estado foi ativado.
 
@@ -4543,7 +4747,7 @@ components:
           enum:
             - PENDING
             - RECEIVED
-            - ACCEPTED_SETTLEMENT_IN_PROGRESS
+            - ACCEPTED_SETTLEMENT_IN_PROCESS
             - ACCEPTED_SETTLEMENT_COMPLETED
             - PORTABILITY_COMPLETED
             - REJECTED
@@ -4640,6 +4844,7 @@ components:
             example: '20.04'
           os:
             type: string
+            description: Versão do Sistema Operacional utilizado
             enum:
               - LINUX
               - MACOS
@@ -4647,7 +4852,7 @@ components:
               - IOS
               - ANDROID
               - OTHER
-            description: Versão do Sistema Operacional utilizado
+              - WINDOWS
             example: LINUX
           timestamp:
             type: string
@@ -4671,6 +4876,11 @@ components:
             pattern: >-
               ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
             example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
+          tokenId:
+            type: string
+            description: >-
+              Identificador único e criptograficamente seguro do token utilizado
+              no consumo da API.
     HybridFlowServerRedirectTargetReportRequest:
       description: UNIX
       type: array
@@ -4836,6 +5046,7 @@ components:
             example: '20.04'
           os:
             type: string
+            description: Sistema Operacional utilizado
             enum:
               - LINUX
               - MACOS
@@ -4843,118 +5054,8 @@ components:
               - IOS
               - ANDROID
               - OTHER
-            description: Sistema Operacional utilizado
+              - WINDOWS
             example: LINUX
-          timestamp:
-            type: string
-            description: >-
-              Data/Hora UTC no formato ISO8601 com milissegundos
-              (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada foi
-              disparada, imediatamente antes do primeiro byte enviado na
-              requisição.
-            maxLength: 28
-            format: date-time
-            example: '2021-11-11T18:08:08.278Z'
-          serverOrgId:
-            description: >-
-              A ser enviado vazio caso o report seja da mesma instituição que
-              obteve o token para uso da PCM e, caso contrário, deve ser
-              preenchido com o organasationId da instituição filha para o qual a
-              instituição mãe está fazendo o report.
-            type: string
-            format: uuid
-            maxLength: 36
-            pattern: >-
-              ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-            example: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
-    HybridFlowServerRedirectToClientRequest:
-      description: ''
-      type: array
-      minItems: 0
-      maxItems: 1000
-      items:
-        type: object
-        required:
-          - consentId
-          - uri_callback
-          - platform
-          - osVersion
-          - os
-          - type
-          - timestamp
-          - serverOrgId
-        properties:
-          consentId:
-            type: string
-            pattern: >-
-              ^urn:[a-zA-Z0-9][a-zA-Z0-9\-]{0,31}:[a-zA-Z0-9()+,\-.:=@;$_!*''%\/?#]+$
-            maxLength: 256
-            description: >-
-              O consentId deve ser preenchido com a mesma string do
-              identificador único de um fluxo de consentimento de dados, de
-              pagamento ou de vínculo
-
-
-              exemplos:
-
-
-              pós POST /open-banking/payments/v4/consents utilizar a string
-              obtida/enviada em data.consentId
-
-
-              pós POST /open-banking/consents/v3/consents utilizar a string
-              obtida/enviada em data.consentId
-
-
-              pós POST /automatic-payments/v1/recurring-consents utilizar a
-              string obtida/enviada em data.recurringConsentId
-
-
-              pós POST /automatic-payments/v1/pix/recurring-payments utilizar a
-              string obtida/enviada em data.recurringConsentId
-
-
-              pós POST /open-banking/enrollments/v1/enrollments utilizar a
-              string obtida/enviada em data.enrollmentId
-            example: urn:bancoex:C1DD33123
-          uri_callback:
-            type: string
-            pattern: ^[- /:_.',0-9a-zA-Z]{0,200}$
-            maxLength: 200
-            format: uri
-            description: >-
-              URI específico fornecido como endpoint de retorno de chamada.
-              Preencher com a uri_callback registrada pelo sistema consumidor
-              durante o DCR/DCM. Caso a URI tenha mais
-            example: https://receptora.com.br/open-banking/landing-page
-          platform:
-            type: string
-            enum:
-              - BROWSER
-              - APP
-            description: Identifica a plataforma utilizada
-            example: BROWSER
-          osVersion:
-            type: string
-            description: Versão do Sistema Operacional utilizado
-            example: '20.04'
-          os:
-            type: string
-            enum:
-              - LINUX
-              - MACOS
-              - UNIX
-              - IOS
-              - ANDROID
-              - OTHER
-            description: Sistema Operacional utilizado
-            example: LINUX
-          type:
-            type: string
-            enum:
-              - AUTHORISED
-              - REJECTED
-            description: Tipo do fluxo de Hybridflow
           timestamp:
             type: string
             description: >-
@@ -4991,6 +5092,7 @@ components:
           - os
           - timestamp
           - clientOrgId
+          - tokenId
         properties:
           consentId:
             type: string
@@ -5038,6 +5140,7 @@ components:
             example: '20.04'
           os:
             type: string
+            description: Sistema Operacional utilizado
             enum:
               - LINUX
               - MACOS
@@ -5045,7 +5148,7 @@ components:
               - IOS
               - ANDROID
               - OTHER
-            description: Sistema Operacional utilizado
+              - WINDOWS
             example: LINUX
           timestamp:
             type: string
@@ -5069,6 +5172,11 @@ components:
             pattern: >-
               ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
             example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
+          tokenId:
+            type: string
+            description: >-
+              Identificador único e criptograficamente seguro do token utilizado
+              no consumo da API.
     HybridFlowServerRedirectTargetWithErrorsRequest:
       description: ''
       type: array
@@ -5131,6 +5239,7 @@ components:
             example: '20.04'
           os:
             type: string
+            description: Sistema Operacional utilizado
             enum:
               - LINUX
               - MACOS
@@ -5138,7 +5247,7 @@ components:
               - IOS
               - ANDROID
               - OTHER
-            description: Sistema Operacional utilizado
+              - WINDOWS
             example: LINUX
           error:
             type: string
@@ -5166,6 +5275,123 @@ components:
             pattern: >-
               ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
             example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
+          tokenId:
+            type: string
+            description: >-
+              Identificador único e criptograficamente seguro do token utilizado
+              no consumo da API.
+    HybridFlowServerRedirectToClientRequest:
+      description: ''
+      type: array
+      minItems: 0
+      maxItems: 1000
+      items:
+        type: object
+        required:
+          - consentId
+          - uri_callback
+          - platform
+          - osVersion
+          - os
+          - type
+          - timestamp
+          - serverOrgId
+        properties:
+          consentId:
+            type: string
+            pattern: >-
+              ^urn:[a-zA-Z0-9][a-zA-Z0-9\-]{0,31}:[a-zA-Z0-9()+,\-.:=@;$_!*''%\/?#]+$
+            maxLength: 256
+            description: >-
+              O consentId deve ser preenchido com a mesma string do
+              identificador único de um fluxo de consentimento de dados, de
+              pagamento ou de vínculo
+
+
+              exemplos:
+
+
+              pós POST /open-banking/payments/v4/consents utilizar a string
+              obtida/enviada em data.consentId
+
+
+              pós POST /open-banking/consents/v3/consents utilizar a string
+              obtida/enviada em data.consentId
+
+
+              pós POST /automatic-payments/v1/recurring-consents utilizar a
+              string obtida/enviada em data.recurringConsentId
+
+
+              pós POST /automatic-payments/v1/pix/recurring-payments utilizar a
+              string obtida/enviada em data.recurringConsentId
+
+
+              pós POST /open-banking/enrollments/v1/enrollments utilizar a
+              string obtida/enviada em data.enrollmentId
+            example: urn:bancoex:C1DD33123
+          uri_callback:
+            type: string
+            pattern: ^[- /:_.',0-9a-zA-Z]{0,200}$
+            maxLength: 200
+            format: uri
+            description: >-
+              URI específico fornecido como endpoint de retorno de chamada.
+              Preencher com a uri_callback registrada pelo sistema consumidor
+              durante o DCR/DCM. Caso a URI tenha mais de 200 caracteres de
+              extensão, truncar.
+            example: https://receptora.com.br/open-banking/landing-page
+          platform:
+            type: string
+            enum:
+              - BROWSER
+              - APP
+            description: Identifica a plataforma utilizada
+            example: BROWSER
+          osVersion:
+            type: string
+            description: Versão do Sistema Operacional utilizado
+            example: '20.04'
+          os:
+            type: string
+            description: Sistema Operacional utilizado
+            enum:
+              - LINUX
+              - MACOS
+              - UNIX
+              - IOS
+              - ANDROID
+              - OTHER
+              - WINDOWS
+            example: LINUX
+          type:
+            type: string
+            enum:
+              - AUTHORISED
+              - REJECTED
+            description: Tipo do fluxo de Hybridflow
+          timestamp:
+            type: string
+            description: >-
+              Data/Hora UTC no formato ISO8601 com milissegundos
+              (YYYY-MM-DDTHH:mm:ss.sssZ) do momento em que a chamada foi
+              disparada, imediatamente antes do primeiro byte enviado na
+              requisição.
+            maxLength: 28
+            format: date-time
+            example: '2021-11-11T18:08:08.278Z'
+          serverOrgId:
+            description: >-
+              A ser enviado vazio caso o report seja da mesma instituição que
+              obteve o token para uso da PCM e, caso contrário, deve ser
+              preenchido com o organasationId da instituição filha para o qual a
+              instituição mãe está fazendo o report.
+            type: string
+            format: uuid
+            maxLength: 36
+            pattern: >-
+              ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+            example: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
     HybridFlowReportResponse:
       additionalProperties: false
       required:
@@ -5288,6 +5514,60 @@ components:
         - paymentStatus
         - paymentType
         - clientOrgId
+    PaymentStatusGetResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaymentStatusRequest'
+        - type: object
+          properties:
+            reportId:
+              type: string
+              description: >-
+                Identificador único do registro criado na Plataforma de Coleta
+                de Métricas.
+            createdAt:
+              type: string
+              format: date-time
+              description: Carimbo do tempo do momento da criação do registro
+            status:
+              type: string
+              enum:
+                - ACCEPTED
+                - DISCARDED
+              description: >-
+                Informa o status do registro de reporte.
+
+
+                DISCARDED: O status DISCARDED indica que o reporte enviado pelo
+                participante foi rejeitado pela PCM. O motivo do descarte será
+                enviado com a resposta, podendo ser por conta de um reporte
+                inválido ou por um erro no processamento. Não é possível
+                modificar um reporte DISCARDED, portanto o reportador deverá
+                corrigir o registro que apresentou erro e reenviar via POST.
+
+                SINGLE: O status SINGLE indica que o reporte em questão não tem
+                uma contraparte. Ele é utilizado em casos onde a conciliação
+                entre dois reportes não é possível.
+
+                ACCEPTED: O status ACCEPTED indica que a validação de formato do
+                reporte não tem erros e este será enviado para processamento.
+
+                UNPAIRED: O status UNPAIRED significa que o reporte atual não
+                possui uma correspondência em outro reporte através do atributo
+                fapiInteractionId. Indica um reporte divergente.
+
+                PAIRED_INCONSISTENT: O status PAIRED_INCONSISTENT significa que
+                o reporte corrente possui uma contraparte com o mesmo
+                fapiInteractionId, mas os demais dados estão inconsistentes.
+                Indica um reporte divergente.
+
+                PAIRED: Indica que o reporte tem uma contraparte com o mesmo
+                fapiInteractionId e os demais dados estão conciliados.
+                Representa o estado final desejado em um fluxo correto.
+              example: ACCEPTED
+          required:
+            - reportId
+            - createdAt
+            - status
     PaymentStatusResponse:
       type: object
       properties:
@@ -5303,27 +5583,12 @@ components:
         - reportId
         - paymentId
         - status
-    PaymentStatusGetResponse:
-      allOf:
-        - $ref: '#/components/schemas/PaymentStatusRequest'
-        - type: object
-          properties:
-            reportId:
-              type: string
-            createdAt:
-              type: string
-              format: date-time
-            status:
-              type: string
-              enum:
-                - ACCEPTED
-                - DISCARDED
-              example: ACCEPTED
-          required:
-            - reportId
-            - createdAt
-            - status
   securitySchemes:
+    PCMAccessToken:
+      description: Token de acesso JWT para autenticação nas APIs da PCM.
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
     bearer:
       type: http
       scheme: bearer
