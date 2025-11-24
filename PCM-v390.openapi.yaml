@@ -2868,7 +2868,7 @@ paths:
                       deverá ser valido se o cliente aprovar no canal digital da
                       instituição credora
 
-                      ACCEPTED_SETTLEMENT_IN_PROCESS: Indica que a
+                      ACCEPTED_SETTLEMENT_IN_PROGRESS: Indica que a
                       contraproposta não foi aceita pelo cliente e a instituição
                       proponente terá que quitar o valor do contrato no mesmo
                       dia em que o estado foi ativado.
@@ -2900,7 +2900,7 @@ paths:
                     enum:
                       - PENDING
                       - RECEIVED
-                      - ACCEPTED_SETTLEMENT_IN_PROCESS
+                      - ACCEPTED_SETTLEMENT_IN_PROGRESS
                       - ACCEPTED_SETTLEMENT_COMPLETED
                       - PORTABILITY_COMPLETED
                       - REJECTED
@@ -4834,7 +4834,7 @@ components:
             telefone, etc.) porém o aceite só deverá ser valido se o cliente
             aprovar no canal digital da instituição credora
 
-            ACCEPTED_SETTLEMENT_IN_PROCESS: Indica que a contraproposta não foi
+            ACCEPTED_SETTLEMENT_IN_PROGRESS: Indica que a contraproposta não foi
             aceita pelo cliente e a instituição proponente terá que quitar o
             valor do contrato no mesmo dia em que o estado foi ativado.
 
@@ -4863,7 +4863,7 @@ components:
           enum:
             - PENDING
             - RECEIVED
-            - ACCEPTED_SETTLEMENT_IN_PROCESS
+            - ACCEPTED_SETTLEMENT_IN_PROGRESS
             - ACCEPTED_SETTLEMENT_COMPLETED
             - PORTABILITY_COMPLETED
             - REJECTED
