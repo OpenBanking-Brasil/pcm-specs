@@ -2980,6 +2980,7 @@ paths:
                 grant_type:
                   type: string
                   example: client_credentials
+            examples: {}
       responses:
         '200':
           description: ''
@@ -3004,6 +3005,20 @@ paths:
                   value:
                     statusCode: 401
                     message: ClientId is not valid to the orgId
+                '3':
+                  summary: Grant type ausente
+                  value:
+                    error: unsupported_grant_type
+                    error_description: Unsupported grant_type
+                '4':
+                  summary: Credenciais ausentes
+                  value:
+                    error: invalid_client
+                    error_description: Invalid client credentials
+                '5':
+                  summary: Sucesso
+                  value:
+                    message: Internal server error
           headers: {}
         '400':
           description: ''
@@ -3019,17 +3034,6 @@ paths:
                 required:
                   - error
                   - error_description
-              examples:
-                '3':
-                  summary: Grant type ausente
-                  value:
-                    error: unsupported_grant_type
-                    error_description: Unsupported grant_type
-                '4':
-                  summary: Credenciais ausentes
-                  value:
-                    error: invalid_client
-                    error_description: Invalid client credentials
           headers: {}
         '500':
           description: ''
@@ -3037,8 +3041,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Internal server error
           headers: {}
       security: []
   /report-api/v1/payments/status:
@@ -4166,11 +4168,6 @@ components:
             clientIp:
               type: string
               description: Endereço IP do cliente que efetuou a chamada
-            tokenId:
-              type: string
-              description: >-
-                Identificador único e criptograficamente seguro do token
-                utilizado no consumo da API.
           description: >-
             Informações adicionais sobre o reporte deste endpoint/método. Possui
             característica variável. As regras de preenchimento estão na
@@ -4428,11 +4425,10 @@ components:
           example: https://openbanking.instituicao-1.com.br/opbk
         consentId:
           type: string
-          format: uuid
-          pattern: >-
-            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           description: Código identificador do pedido de portabilidade realizado.
-          example: b9b0ca92-3e97-4711-af1a-8a70fab0bb16
+          pattern: >-
+            ^urn:[a-zA-Z0-9][a-zA-Z0-9\-]{0,31}:[a-zA-Z0-9()+,\-.:=@;$_!*''%\/?#]+$
+          maxLength: 100
         correlationId:
           type: string
           pattern: ^[- /:_.',0-9a-zA-Z]{0,100}$
@@ -4675,11 +4671,10 @@ components:
           example: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
         consentId:
           type: string
-          format: uuid
-          pattern: >-
-            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           description: Código identificador do pedido de portabilidade realizado.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          pattern: >-
+            ^urn:[a-zA-Z0-9][a-zA-Z0-9\-]{0,31}:[a-zA-Z0-9()+,\-.:=@;$_!*''%\/?#]+$
+          maxLength: 100
         statusUpdateDateTime:
           type: string
           description: >-
@@ -4992,11 +4987,6 @@ components:
             pattern: >-
               ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
             example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
-          tokenId:
-            type: string
-            description: >-
-              Identificador único e criptograficamente seguro do token utilizado
-              no consumo da API.
     HybridFlowServerRedirectTargetReportRequest:
       description: UNIX
       type: array
@@ -5208,7 +5198,6 @@ components:
           - os
           - timestamp
           - clientOrgId
-          - tokenId
         properties:
           consentId:
             type: string
@@ -5288,11 +5277,6 @@ components:
             pattern: >-
               ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
             example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
-          tokenId:
-            type: string
-            description: >-
-              Identificador único e criptograficamente seguro do token utilizado
-              no consumo da API.
     HybridFlowServerRedirectTargetWithErrorsRequest:
       description: ''
       type: array
@@ -5391,11 +5375,6 @@ components:
             pattern: >-
               ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
             example: 56411f7e-d58b-44a8-8a2b-ff326d3f2955
-          tokenId:
-            type: string
-            description: >-
-              Identificador único e criptograficamente seguro do token utilizado
-              no consumo da API.
     HybridFlowServerRedirectToClientRequest:
       description: ''
       type: array
@@ -5699,6 +5678,112 @@ components:
         - reportId
         - paymentId
         - status
+  responses:
+    Default429Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            NotAccetable:
+              summary: NotAccetable
+              value:
+                message: Too Many Requests
+    Default400Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            Bad Request:
+              summary: Bad Request
+              value:
+                message: 'Invalid payload format: MUST be an array'
+    Default401Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            NotAuthorized:
+              summary: NotAuthorized
+              value:
+                message: Unauthorized
+    Default403Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            Forbidden:
+              summary: Forbidden
+              value:
+                message: Forbidden
+    Default406Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            NotAccetable:
+              summary: NotAccetable
+              value:
+                message: Content type not accepted
+    Default415Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            NotAccetable:
+              summary: NotAccetable
+              value:
+                message: Unsupported Media Type
+    Default500Error:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+          examples:
+            InternalServerError:
+              summary: InternalServerError
+              value:
+                message: Internal Server Error
+    Record not found:
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+            required:
+              - code
+              - message
+    Invalid input:
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+            required:
+              - code
+              - message
   securitySchemes:
     PCMAccessToken:
       description: Token de acesso JWT para autenticação nas APIs da PCM.
