@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.9.1
 info:
-  title: PCM-OpenApi
+  title: Default module
   description: >
     # Introdução
 
@@ -377,7 +377,11 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
               example:
                 message: Unauthorized
           headers: {}
@@ -387,7 +391,11 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
               example:
                 message: Forbidden
           headers: {}
@@ -397,7 +405,17 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  message:
+                    type: string
+                  request_id:
+                    type: string
+                required:
+                  - message
+                  - request_id
+              example:
+                message: Not found
+                request_id: z1240cc1d73a39e13eb00fd62c5e1be11
           headers: {}
         '406':
           description: ''
@@ -405,7 +423,11 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
               example:
                 message: Content type not accepted
           headers: {}
@@ -415,7 +437,11 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
               example:
                 message: Too Many Requests
           headers: {}
@@ -425,7 +451,11 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
               example:
                 message: Internal Server Error
           headers: {}
@@ -2954,11 +2984,116 @@ paths:
                       conciliados. Representa o estado final desejado em um
                       fluxo correto.
           headers: {}
+        '401':
+          $ref: '#/components/responses/Default401Error'
+          description: ''
+        '403':
+          $ref: '#/components/responses/Default403Error'
+          description: ''
+        '404':
+          $ref: '#/components/responses/Record not found'
+          description: ''
+        '406':
+          $ref: '#/components/responses/Default406Error'
+          description: ''
+        '429':
+          $ref: '#/components/responses/Default429Error'
+          description: ''
+        '500':
+          $ref: '#/components/responses/Default500Error'
+          description: ''
       security:
         - bearer: []
+  /token-fresh/:
+    post:
+      summary: 'Geração de novo Token de autênticação '
+      deprecated: false
+      description: ''
+      operationId: token
+      tags:
+        - Security API
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  example: '{{client_id}}882ba573-787b-4462-bbd9-e3b39324aca7'
+                client_secret:
+                  type: string
+                  example: 882ba573-787b-4462-bbd9-e3b39324aca7
+                grant_type:
+                  type: string
+                  example: client_credentials
+            examples: {}
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityResponse'
+              examples:
+                '1':
+                  summary: Exemplo de resposta sucesso
+                  value:
+                    statusCode: 200
+                    access_token: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30
+                    expires_in: 21600
+                    refresh_expires_in: 0
+                    token_type: Bearer
+                    not-before-policy: 0
+                    scope: profile email
+                '2':
+                  summary: Cliente não autorizado
+                  value:
+                    statusCode: 401
+                    message: ClientId is not valid to the orgId
+                '3':
+                  summary: Grant type ausente
+                  value:
+                    error: unsupported_grant_type
+                    error_description: Unsupported grant_type
+                '4':
+                  summary: Credenciais ausentes
+                  value:
+                    error: invalid_client
+                    error_description: Invalid client credentials
+                '5':
+                  summary: Sucesso
+                  value:
+                    message: Internal server error
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  error_description:
+                    type: string
+                required:
+                  - error
+                  - error_description
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          headers: {}
+      security: []
   /token/:
     post:
-      summary: Token de autênticação
+      summary: Obtenção de Token de autênticação ativo
       deprecated: false
       description: ''
       operationId: token
@@ -3106,6 +3241,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentStatusGetResponse'
           headers: {}
+        '401':
+          $ref: '#/components/responses/Default401Error'
+          description: ''
+        '403':
+          $ref: '#/components/responses/Default403Error'
+          description: ''
+        '404':
+          $ref: '#/components/responses/Record not found'
+          description: ''
+        '406':
+          $ref: '#/components/responses/Default406Error'
+          description: ''
+        '429':
+          $ref: '#/components/responses/Default429Error'
+          description: ''
+        '500':
+          $ref: '#/components/responses/Default500Error'
+          description: ''
       security:
         - bearer: []
   /report-api/v2/report:
@@ -3180,9 +3333,7 @@ components:
           format: uri
           example: /open-banking/consents/v2/consents
         statusCode:
-          description: >-
-            Status de retorno HTTP da solicitação. No caso de ocorrer um timeout
-            client side preencher com um código 403 (conforme documentação ).
+          description: Status de retorno HTTP da solicitação.
           type: integer
           format: int32
           minimum: 200
@@ -3468,6 +3619,8 @@ components:
                 - RECURRENT
                 - SWEEPING
                 - AUTOMATIC
+                - WITHDRAW
+                - CHANGE
             dropReason:
               description: >-
                 Regras:
@@ -3850,10 +4003,7 @@ components:
           format: uri
           example: /open-banking/consents/v2/consents
         statusCode:
-          description: >-
-            Status de retorno HTTP da solicitação. No caso de ocorrer um timeout
-            client side preencher com um código 408 [conforme
-            documentação](https://openfinancebrasil.atlassian.net/wiki/spaces/OF/pages/37879861/Reporte)
+          description: Status de retorno HTTP da solicitação.
           type: integer
           format: int32
           minimum: 200
@@ -4395,9 +4545,7 @@ components:
           format: int32
           minimum: 200
           maximum: 599
-          description: >-
-            Status de retorno HTTP da solicitação. No caso de ocorrer um timeout
-            client side preencher com um código 403 (conforme documentação ).
+          description: Status de retorno HTTP da solicitação.
           example: 200
         httpMethod:
           type: string
@@ -4607,9 +4755,7 @@ components:
           format: int32
           minimum: 200
           maximum: 599
-          description: >-
-            Status de retorno HTTP da solicitação. No caso de ocorrer um timeout
-            client side preencher com um código 403 (conforme documentação ).
+          description: Status de retorno HTTP da solicitação.
           example: 200
         httpMethod:
           type: string
@@ -5520,7 +5666,7 @@ components:
       properties:
         statusCode:
           type: integer
-          description: Qual o status da resposta da api.
+          description: Status de retorno HTTP da solicitação.
           minimum: 200
           maximum: 599
           example: 200
@@ -5763,13 +5909,15 @@ components:
           schema:
             type: object
             properties:
-              code:
-                type: integer
               message:
                 type: string
             required:
-              - code
               - message
+          examples:
+            Example 1:
+              summary: Example 1
+              value:
+                message: Not Found
     Invalid input:
       description: ''
       content:
@@ -5777,13 +5925,15 @@ components:
           schema:
             type: object
             properties:
-              code:
-                type: integer
               message:
                 type: string
             required:
-              - code
               - message
+          examples:
+            Example 1:
+              summary: Example 1
+              value:
+                message: Bad Request
   securitySchemes:
     PCMAccessToken:
       description: Token de acesso JWT para autenticação nas APIs da PCM.
