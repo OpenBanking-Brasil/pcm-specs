@@ -575,7 +575,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - 'PAIRED '
+                      - PAIRED
                     example: ACCEPTED
                   message:
                     description: >-
@@ -1057,7 +1057,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - 'PAIRED '
+                      - PAIRED
                     example: ACCEPTED
                   message:
                     description: >-
