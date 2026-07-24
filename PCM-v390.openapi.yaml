@@ -3952,7 +3952,7 @@ components:
                 intenção do fluxo de autorização
               enum:
                 - HYBRID_FLOW
-                - 'CIBA_FLOW '
+                - 'CIBA_FLOW'
                 - FIDO_FLOW
               example: HYBRID_FLOW
             tokenId:
@@ -4125,7 +4125,7 @@ components:
               enum:
                 - NO_AUTHORITY
                 - NO_AUTHORITY_PERSON_MISMATCH
-                - NO_CREDENTIAL, NONE
+                - NO_CREDENTIAL,NONE
               example: NO_AUTHORITY
     ReportResponse:
       description: >-
