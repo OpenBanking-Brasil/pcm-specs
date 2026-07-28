@@ -5214,6 +5214,8 @@ components:
               - AWAITING_HANDOFF
               - AWAITING_USER_AUTH
               - AWAITING_REDIRECT_TO_APP
+              - AUTHORISED
+              - REJECTED
             description: Tipo do fluxo de Hybridflow
           timestamp:
             type: string
