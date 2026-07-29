@@ -3498,6 +3498,8 @@ components:
                 - AUTO
                 - QRDN
                 - QRES
+                - APDN
+                - APES
               example: MANU
             status:
               description: >-
