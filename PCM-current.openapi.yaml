@@ -2227,7 +2227,7 @@ paths:
               Request Valido:
                 value:
                   date: '2021-11-11'
-                  orgId: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
+                  orgId: d78fc4e5-37ca-4da3-adf2-9b082bf92280
                   role: CLIENT
                   scope: DADOS
                   totalCustomerPF: 100
@@ -4878,10 +4878,8 @@ components:
         date:
           type: string
           description: >-
-            Data UTC no formato ISO8601 (YYYY-MM-DD) do momento em que a chamada
-            foi disparada, imediatamente antes do primeiro byte enviado na
-            requisição. Deve conter a data a que se referem os dados de
-            consentimento enviados na mensagem.
+             Data UTC no formato ISO8601 (YYYY-MM-DD). Deve conter a data 
+             a que se referem os dados de consentimento enviados na mensagem.
           format: date-time
           maxLength: 10
           example: '2021-11-11'
@@ -4925,6 +4923,7 @@ components:
           example: 100
         consentsStockList:
           type: array
+          description: Todos os registros desta lista devem conter a “orgId” do cabeçalho no papel definido no cabeçalho
           items:
             type: object
             properties:
