@@ -6281,6 +6281,8 @@ components:
             - SWEEPING
             - AUTOMATIC
             - SCHEDULED
+            - WITHDRAW
+            - CHANGE
           example: RECURRENT
         statusReasonCode:
           type: string
