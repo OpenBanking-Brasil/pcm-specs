@@ -3579,13 +3579,11 @@ components:
             errorCodes:
               type: string
               description: >-
-                Registra os códigos de erro detalhados de uma requisição que
+                Registra os códigos de erro detalhados de uma requisição que 
                 resultou em um erro HTTP (série 4xx ou 5xx).
-
-                Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido
-                com a lista das strings obtidas em ".errors[].code" . Não
-                havendo string, deve ser enviada uma lista vazia.
-
+                
+                Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido 
+                com a lista das strings obtidas em ".errors[].code"
 
                 Regras de preenchimento:
 
