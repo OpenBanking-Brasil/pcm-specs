@@ -3952,7 +3952,7 @@ components:
                 intenção do fluxo de autorização
               enum:
                 - HYBRID_FLOW
-                - 'CIBA_FLOW '
+                - 'CIBA_FLOW'
                 - FIDO_FLOW
               example: HYBRID_FLOW
             tokenId:
