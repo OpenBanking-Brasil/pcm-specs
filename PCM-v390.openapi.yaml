@@ -575,7 +575,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - 'PAIRED '
+                      - PAIRED
                     example: ACCEPTED
                   message:
                     description: >-
@@ -1057,7 +1057,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - 'PAIRED '
+                      - PAIRED
                     example: ACCEPTED
                   message:
                     description: >-
@@ -4125,7 +4125,8 @@ components:
               enum:
                 - NO_AUTHORITY
                 - NO_AUTHORITY_PERSON_MISMATCH
-                - NO_CREDENTIAL,NONE
+                - NO_CREDENTIAL
+                - NONE
               example: NO_AUTHORITY
     ReportResponse:
       description: >-
