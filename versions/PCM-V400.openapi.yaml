@@ -575,7 +575,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - PAIRED
+                      - 'PAIRED '
                     example: ACCEPTED
                   message:
                     description: >-
@@ -1057,7 +1057,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - PAIRED
+                      - 'PAIRED '
                     example: ACCEPTED
                   message:
                     description: >-
@@ -3531,6 +3531,8 @@ components:
               enum:
                 - PF
                 - PJ
+                - PESSOA_NATURAL
+                - PESSOA_JURÍDICA
               example: PJ
             localInstrument:
               type: string
@@ -3577,8 +3579,20 @@ components:
             errorCodes:
               type: string
               description: >-
-                Registra os códigos de erro detalhados de uma requisição que resultou em um erro HTTP (série 4xx ou 5xx).
-                Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido com a lista das strings obtidas em ".errors[].code"
+                Registra os códigos de erro detalhados de uma requisição que
+                resultou em um erro HTTP (série 4xx ou 5xx).
+
+                Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido
+                com a lista das strings obtidas em ".errors[].code" . Não
+                havendo string, deve ser enviada uma lista vazia.
+
+
+                Regras de preenchimento:
+
+                - Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser
+                preenchido com a lista das strings obtidas em ".errors[].code",
+                devendo constar apenas um código de erro. Não havendo string,
+                deve ser enviada uma lista vazia.
               example: NAO_INFORMADO
             webhookEnable:
               type: string
@@ -3703,7 +3717,7 @@ components:
                 especificações das APIs do Open Finance.
               enum:
                 - CIBA_FLOW
-                - FIDO_FLOW
+                - ' FIDO_FLOW'
                 - HYBRID_FLOW
               example: HYBRID_FLOW
             paymentType:
@@ -3810,7 +3824,7 @@ components:
                 - NO_AUTHORITY
                 - NO_AUTHORITY_PERSON_MISMATCH
                 - NO_CREDENTIAL
-                - NONE
+                - ' NONE'
               example: NO_CREDENTIAL
             grantType:
               type: string
@@ -4397,7 +4411,7 @@ components:
                 efetivamente utilizado na transação.
               enum:
                 - HYBRID_FLOW
-                - CIBA_FLOW
+                - 'CIBA_FLOW '
                 - FIDO_FLOW
               example: HYBRID_FLOW
             tokenId:
@@ -5010,11 +5024,11 @@ components:
           pattern: >-
             ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           description: >-
-            UUID RFC4122 que identifica uma transação específica entre dois participantes no ecossistema Open Finance. Este identificador é derivado do header HTTP x-fapi-interaction-id, conforme especificação RFC4122 para geração de identificadores únicos universais. Serve como chave de correlação fundamental para rastreabilidade, auditoria e conciliação de transações entre instituições participantes. Mais informações em Cabeçalhos HTTP na documentação de produtos do Open Finance Brasil
-
-            Regra de Preenchimento:
-
-            OBRIGATÓRIO em todos os cenários onde o x-fapi-interaction-id foi gerado, incluindo respostas com status 4xx (incluindo 408 - timeout), respostas com status 5xx recebidas e transações completadas com sucesso
+            O envio dessa informação é obrigatório, exceto nos casos onde ela
+            não esteja disponível como, por exemplo, em respostas com status
+            5xx, ou em chamadas que terminaram por timeout onde o reporte tem
+            que ser enviado, mas sem esse atributo. Nos demais cenários, o envio
+            é obrigatório.
           example: d78fc4e5-37ca-4da3-adf2-9b082bf92280
         clientSSId:
           type: string
@@ -5246,11 +5260,11 @@ components:
         fapiInteractionId:
           type: string
           description: >-
-            UUID RFC4122 que identifica uma transação específica entre dois participantes no ecossistema Open Finance. Este identificador é derivado do header HTTP x-fapi-interaction-id, conforme especificação RFC4122 para geração de identificadores únicos universais. Serve como chave de correlação fundamental para rastreabilidade, auditoria e conciliação de transações entre instituições participantes. Mais informações em Cabeçalhos HTTP na documentação de produtos do Open Finance Brasil
-
-            Regras de preenchimento
-
-            OBRIGATÓRIO quando o x-fapi-interaction-id foi recebido na requisição ou quando o Server gerou o x-fapi-interaction-id conforme especificação da API de Produto. Falhas de aplicação, validação, autorização, timeout, indisponibilidade de dependências ou erros internos (5xx) NÃO caracterizam, por si só, falha crítica para fins de ausência do x-fapi-interaction-id, desde que a requisição tenha sido recebida pelo Server.
+            UUID que identifica uma transação específica entre dois
+            participantes. Esse dado pode ser encontrado no header
+            x-fapi-interaction-id que é informado pelo Client e devolvido pelo
+            Server. Mais informações em Cabeçalhos HTTP na documentação do Open
+            Finance Brasil.
           maxLength: 36
           pattern: >-
             ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
@@ -5733,8 +5747,6 @@ components:
               - AWAITING_HANDOFF
               - AWAITING_USER_AUTH
               - AWAITING_REDIRECT_TO_APP
-              - AUTHORISED
-              - REJECTED 
             description: Tipo do fluxo de Hybridflow
           timestamp:
             type: string
@@ -6267,9 +6279,8 @@ components:
             - IMMEDIATE
             - RECURRENT
             - SWEEPING
+            - AUTOMATIC
             - SCHEDULED
-            - WITHDRAW
-            - CHANGE
           example: RECURRENT
         statusReasonCode:
           type: string
