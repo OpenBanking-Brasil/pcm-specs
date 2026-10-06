@@ -336,7 +336,7 @@ paths:
           headers: {}
       security:
         - bearer: []
-  /report-api/v1/private/report/{fapiInteractonId}:
+  /report-api/v1/private/report/8b74b673-272c-48ce-8967-fd34ca85a45a:
     get:
       summary: Consulta um report em específico usando um identificador
       deprecated: false
@@ -355,14 +355,7 @@ paths:
       operationId: report-by-id
       tags:
         - Private API
-      parameters:
-        - name: fapiInteractonId
-          in: path
-          description: ''
-          required: true
-          example: ''
-          schema:
-            type: string
+      parameters: []
       responses:
         '200':
           description: ''
@@ -575,7 +568,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - PAIRED
+                      - 'PAIRED '
                     example: ACCEPTED
                   message:
                     description: >-
@@ -1057,7 +1050,7 @@ paths:
                       - ACCEPTED
                       - UNPAIRED
                       - PAIRED_INCONSISTENT
-                      - PAIRED
+                      - 'PAIRED '
                     example: ACCEPTED
                   message:
                     description: >-
@@ -2373,11 +2366,6 @@ paths:
                 role: CLIENT
                 portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
                 creationDateTime: '2020-07-21T08:30:00Z'
-                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                originalContractCET: '0.290000'
-                originalPropositionCET: '0.290000'
-                originalContractTerm: 57
-                propositionTerm: 30
                 creditPortabilityStatus: PENDING
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
@@ -2396,11 +2384,6 @@ paths:
                 role: CLIENT
                 portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
                 creationDateTime: '2020-07-21T08:30:00Z'
-                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                originalContractCET: '0.290000'
-                originalPropositionCET: '0.290000'
-                originalContractTerm: 57
-                propositionTerm: 30
                 creditPortabilityStatus: PENDING
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
@@ -2419,11 +2402,6 @@ paths:
                 role: CLIENT
                 portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
                 creationDateTime: '2020-07-21T08:30:00Z'
-                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                originalContractCET: '0.290000'
-                originalPropositionCET: '0.290000'
-                originalContractTerm: 57
-                propositionTerm: 30
                 creditPortabilityStatus: PENDING
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
@@ -2442,11 +2420,6 @@ paths:
                 role: CLIENT
                 portabilityId: 54d5348c-1a3f-4ff4-a8a8-d0724fb806c6
                 creationDateTime: '2020-07-21T08:30:00Z'
-                productSubTypeCategory: CREDITO_PESSOAL_CLEAN
-                originalContractCET: '0.290000'
-                originalPropositionCET: '0.290000'
-                originalContractTerm: 57
-                propositionTerm: 30
                 creditPortabilityStatus: PENDING
                 statusUpdateDateTime: '2020-07-21T08:30:00Z'
                 rejectionReason: CANCELADO_PELO_CLIENTE
@@ -2495,26 +2468,6 @@ paths:
                       correlationId: wNupARo7I9E2PLJZph18a0M9y7DcUe7ITt3DqUOJd9NVjnskxf,
                       status: DISCARDED,
                       message: 'Missing fields: ''statusCode'''
-          headers: {}
-        '207':
-          description: >-
-            O status 207 (Multi-Status) informa ao solicitante que o formato da
-            requisição está correto, mas que entradas do array contém erro de
-            validação em pelo menos 1 item. Ou seja, se todos os elementos do
-            array informado estiverem com falha de validação, a operação vai
-            devolver o status 207, e no corpo da resposta todos os elementos do
-            array vão estar com status DISCARDED e com sua respectiva mensagem.
-
-
-            A operação vai devolver um array com todos os resultados, e garante
-            que ele esteja na mesma ordem do array da requisição.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReportResponse'
-              examples:
                 '4':
                   summary: Sucesso
                   value:
@@ -2534,6 +2487,57 @@ paths:
                     reportId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                     correlationId: 424ad55c-36cc-4077-b85e-c22ea984cc4a
                     status: ACCEPTED
+                '7':
+                  summary: Sucesso
+                  value:
+                    message: 'Invalid payload format: MUST be an array'
+                '8':
+                  summary: Sucesso
+                  value:
+                    message: Unauthorized
+                '9':
+                  summary: Sucesso
+                  value:
+                    message: Forbidden
+                '10':
+                  summary: Sucesso
+                  value:
+                    message: Content type not accepted
+                '11':
+                  summary: Sucesso
+                  value:
+                    message: Record limit exceeded
+                '12':
+                  summary: Sucesso
+                  value:
+                    message: Unsupported Media Type
+                '13':
+                  summary: Sucesso
+                  value:
+                    message: Too Many Requests
+                '14':
+                  summary: Sucesso
+                  value:
+                    message: Internal Server Error
+          headers: {}
+        '207':
+          description: >-
+            O status 207 (Multi-Status) informa ao solicitante que o formato da
+            requisição está correto, mas que entradas do array contém erro de
+            validação em pelo menos 1 item. Ou seja, se todos os elementos do
+            array informado estiverem com falha de validação, a operação vai
+            devolver o status 207, e no corpo da resposta todos os elementos do
+            array vão estar com status DISCARDED e com sua respectiva mensagem.
+
+
+            A operação vai devolver um array com todos os resultados, e garante
+            que ele esteja na mesma ordem do array da requisição.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportResponse'
           headers: {}
         '400':
           description: O formato do corpo da requisição não é um array.
@@ -2541,8 +2545,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: 'Invalid payload format: MUST be an array'
           headers: {}
         '401':
           description: >-
@@ -2552,8 +2554,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Unauthorized
           headers: {}
         '403':
           description: >-
@@ -2563,8 +2563,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Forbidden
           headers: {}
         '406':
           description: >-
@@ -2574,8 +2572,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Content type not accepted
           headers: {}
         '413':
           description: ''
@@ -2583,8 +2579,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Record limit exceeded
           headers: {}
         '415':
           description: >-
@@ -2594,8 +2588,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Unsupported Media Type
           headers: {}
         '429':
           description: >-
@@ -2605,8 +2597,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Too Many Requests
           headers: {}
         '500':
           description: É devolvido quando ocorre um erro não identificado no servidor
@@ -2614,8 +2604,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericError'
-              example:
-                message: Internal Server Error
           headers: {}
       security:
         - bearer: []
@@ -3028,7 +3016,10 @@ paths:
                 grant_type:
                   type: string
                   example: client_credentials
-            examples: {}
+            example:
+              client_id: 882ba573-787b-4462-bbd9-e3b39324aca7
+              client_secret: 882ba573-787b-4462-bbd9-e3b39324aca7
+              grant_type: client_credentials
       responses:
         '200':
           description: ''
@@ -3115,7 +3106,10 @@ paths:
                 grant_type:
                   type: string
                   example: client_credentials
-            examples: {}
+            example:
+              client_id: 882ba573-787b-4462-bbd9-e3b39324aca7
+              client_secret: 882ba573-787b-4462-bbd9-e3b39324aca7
+              grant_type: client_credentials
       responses:
         '200':
           description: ''
@@ -3531,6 +3525,8 @@ components:
               enum:
                 - PF
                 - PJ
+                - PESSOA_NATURAL
+                - PESSOA_JURÍDICA
               example: PJ
             localInstrument:
               type: string
@@ -3546,6 +3542,8 @@ components:
                 - AUTO
                 - QRDN
                 - QRES
+                - APDN
+                - APES
               example: MANU
             status:
               type: string
@@ -3577,8 +3575,20 @@ components:
             errorCodes:
               type: string
               description: >-
-                Registra os códigos de erro detalhados de uma requisição que resultou em um erro HTTP (série 4xx ou 5xx).
-                Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido com a lista das strings obtidas em ".errors[].code"
+                Registra os códigos de erro detalhados de uma requisição que
+                resultou em um erro HTTP (série 4xx ou 5xx).
+
+                Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser preenchido
+                com a lista das strings obtidas em ".errors[].code" . Não
+                havendo string, deve ser enviada uma lista vazia.
+
+
+                Regras de preenchimento:
+
+                - Caso o HTTP Code seja 4XX ou 5XX, esse campo deve ser
+                preenchido com a lista das strings obtidas em ".errors[].code",
+                devendo constar apenas um código de erro. Não havendo string,
+                deve ser enviada uma lista vazia.
               example: NAO_INFORMADO
             webhookEnable:
               type: string
@@ -3703,7 +3713,7 @@ components:
                 especificações das APIs do Open Finance.
               enum:
                 - CIBA_FLOW
-                - FIDO_FLOW
+                - ' FIDO_FLOW'
                 - HYBRID_FLOW
               example: HYBRID_FLOW
             paymentType:
@@ -3810,7 +3820,7 @@ components:
                 - NO_AUTHORITY
                 - NO_AUTHORITY_PERSON_MISMATCH
                 - NO_CREDENTIAL
-                - NONE
+                - ' NONE'
               example: NO_CREDENTIAL
             grantType:
               type: string
@@ -3953,8 +3963,8 @@ components:
 
                 - Deve ser preenchido quando paymentType for AUTOMATIC
               enum:
-                - 'TRUE'
-                - 'FALSE'
+                - 'true'
+                - 'false'
               example: 'TRUE'
             recurringPaymentId:
               type: string
@@ -4032,8 +4042,8 @@ components:
                 header do endpoint de autorização de consentimentos via JSR
                 (POST /consents/{consentId}/authorise)
               enum:
-                - 'TRUE'
-                - 'FALSE'
+                - 'true'
+                - 'false'
               example: 'TRUE'
             revocationReasonCode:
               type: string
@@ -4352,8 +4362,8 @@ components:
                 envio do valor FALSE.
               title: ''
               enum:
-                - 'TRUE'
-                - 'FALSE'
+                - 'true'
+                - 'false'
               example: 'FALSE'
             journeyLinkId:
               type: string
@@ -4397,7 +4407,7 @@ components:
                 efetivamente utilizado na transação.
               enum:
                 - HYBRID_FLOW
-                - CIBA_FLOW
+                - 'CIBA_FLOW '
                 - FIDO_FLOW
               example: HYBRID_FLOW
             tokenId:
@@ -4595,51 +4605,36 @@ components:
             dropReason:
               type: string
               description: >-
-                Regras:
-
-
-                • O campo dropReason deve ser adicionado nas informações do
-                campo additionalInfo que deverá ser enviado no reporte do
-                provedor do serviço consumido (papel SERVER)
-
-                • O reporte deverá ser feito por todos os transmissores de dados
-                e detentoras de conta. Para os casos em que ocorram falhas
-                técnicas que impossibilitem a verificação do CPF/CNPJ
-                (incluindo, mas não se limitando, a erros HTTP 4xx, 500 ou
-                timeout na resposta), o reporte deve ser realizado com o valor
-                NO_CREDENTIAL, Em jornadas de múltipla alçada de pessoas
-                jurídicas, quando a autenticação é bem-sucedida mas os poderes
-                constituídos são insuficientes para finalização do Hybrid Flow,
-                deve-se usar NO_AUTHORITY.
-
-                Diretrizes:
-
-
-                • NONE: quando o CPF (loggedUser) / CNPJ (businessEntity) possui
-                credencial autenticadora e poderes suficientes para prosseguir o
-                fluxo monitorado - exemplo: PF, cliente, que possui credencial
-                ativa, mas não se autenticou; cliente que se autenticou
-                utilizando a credencial correta.
-
-                • NO_CREDENTIAL: quando o CPF (loggedUser) / CNPJ
-                (businessEntity) não for cliente ou não possuir credencial
-                válida/ativa para prosseguir no fluxo monitorado ou quando o
-                HTTP response code for diferente de 201.
-
-                • NO_AUTHORITY: quando o CPF (loggedUser) / CNPJ
-                (businessEntity) consegue se autenticar, mas não dispõe de
-                poderes ou alçadas para prosseguir no fluxo de compartilhamento
-                de dados e serviços.
-
-                • NO_AUTHORITY_PERSON_MISMATCH: quando o CPF (loggedUser) não
-                possui relação com a credencial utilizada na etapa de
-                autenticação do Hybrid Flow - exemplo: consentimento criado para
-                um CPF e autenticado por outro; criado para um CNPJ e
-                autenticado por CPF sem relação com o CNPJ.
+                O servidor confirmou que o CPF/CNPJ possui credencial
+                autenticadora apta a prosseguir e alçadas suficientes para o
+                fluxo, seja por verificação na sessão, seja por checagem em seus
+                registros. O drop, se houve, ocorreu por razão alheia a
+                credencial e alçadas, incluindo a não-conclusão ou não-resposta
+                do usuário dentro do prazo (abandono). NO_CREDENTIAL: Quando o
+                CPF/CNPJ não possui credencial autenticadora cadastrada na
+                instituição, por inexistência de relacionamento ou por nunca ter
+                habilitado credencial, alinhado à definição de cliente da IN
+                706, §2.6.2. CREDENTIAL_UNAVAILABLE: Quando o CPF/CNPJ possui
+                credencial autenticadora cadastrada mas ela está temporariamente
+                indisponível para uso (bloqueio por tentativas, expiração,
+                inativação, 2FA indisponível, bloqueio cautelar, KYC pendente),
+                ou quando uma falha técnica impede verificar o estado da
+                credencial. Em ambos os casos o usuário permanece reconhecido
+                como cliente para fins da IN 706, §2.6.2. Na impossibilidade
+                técnica de determinar o estado, classifica-se
+                CREDENTIAL_UNAVAILABLE; NO_CREDENTIAL fica reservado aos casos
+                de ausência comprovada de credencial. NO_AUTHORITY: Quando o
+                CPF/CNPJ possui credencial autenticadora e consegue se
+                autenticar, mas não dispõe de poderes ou alçadas suficientes
+                para prosseguir no fluxo de compartilhamento de dados e
+                serviços. NO_AUTHORITY_PERSON_MISMATCH: Quando a identidade
+                autenticada não corresponde àquela para a qual o consentimento
+                foi criado. Aplica-se ao Hybrid Flow.
               enum:
                 - NO_AUTHORITY
                 - NO_AUTHORITY_PERSON_MISMATCH
                 - NO_CREDENTIAL, NONE
+                - CREDENTIAL_UNAVAILABLE
               example: NO_AUTHORITY
     ReportResponse:
       description: >-
@@ -5010,11 +5005,25 @@ components:
           pattern: >-
             ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           description: >-
-            UUID RFC4122 que identifica uma transação específica entre dois participantes no ecossistema Open Finance. Este identificador é derivado do header HTTP x-fapi-interaction-id, conforme especificação RFC4122 para geração de identificadores únicos universais. Serve como chave de correlação fundamental para rastreabilidade, auditoria e conciliação de transações entre instituições participantes. Mais informações em Cabeçalhos HTTP na documentação de produtos do Open Finance Brasil
+            Role CLIENT
+
+            UUID RFC4122 que identifica uma transação específica entre dois
+            participantes no ecossistema Open Finance. Este identificador é
+            derivado do header HTTP x-fapi-interaction-id, conforme
+            especificação RFC4122 para geração de identificadores únicos
+            universais. Serve como chave de correlação fundamental para
+            rastreabilidade, auditoria e conciliação de transações entre
+            instituições participantes. Mais informações em Cabeçalhos HTTP na
+            documentação de produtos do Open Finance Brasil
+
 
             Regra de Preenchimento:
 
-            OBRIGATÓRIO em todos os cenários onde o x-fapi-interaction-id foi gerado, incluindo respostas com status 4xx (incluindo 408 - timeout), respostas com status 5xx recebidas e transações completadas com sucesso
+
+            OBRIGATÓRIO em todos os cenários onde o x-fapi-interaction-id foi
+            gerado, incluindo respostas com status 4xx (incluindo 408 -
+            timeout), respostas com status 5xx recebidas e transações
+            completadas com sucesso
           example: d78fc4e5-37ca-4da3-adf2-9b082bf92280
         clientSSId:
           type: string
@@ -5246,11 +5255,11 @@ components:
         fapiInteractionId:
           type: string
           description: >-
-            UUID RFC4122 que identifica uma transação específica entre dois participantes no ecossistema Open Finance. Este identificador é derivado do header HTTP x-fapi-interaction-id, conforme especificação RFC4122 para geração de identificadores únicos universais. Serve como chave de correlação fundamental para rastreabilidade, auditoria e conciliação de transações entre instituições participantes. Mais informações em Cabeçalhos HTTP na documentação de produtos do Open Finance Brasil
-
-            Regras de preenchimento
-
-            OBRIGATÓRIO quando o x-fapi-interaction-id foi recebido na requisição ou quando o Server gerou o x-fapi-interaction-id conforme especificação da API de Produto. Falhas de aplicação, validação, autorização, timeout, indisponibilidade de dependências ou erros internos (5xx) NÃO caracterizam, por si só, falha crítica para fins de ausência do x-fapi-interaction-id, desde que a requisição tenha sido recebida pelo Server.
+            UUID que identifica uma transação específica entre dois
+            participantes. Esse dado pode ser encontrado no header
+            x-fapi-interaction-id que é informado pelo Client e devolvido pelo
+            Server. Mais informações em Cabeçalhos HTTP na documentação do Open
+            Finance Brasil.
           maxLength: 36
           pattern: >-
             ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
@@ -5321,7 +5330,27 @@ components:
           maxLength: 36
           pattern: >-
             ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-          description: Identificador da organização para onde a chamada foi feita.
+          description: >-
+            UUID RFC4122 que identifica uma transação específica entre dois
+            participantes no ecossistema Open Finance. Este identificador é
+            derivado do header HTTP x-fapi-interaction-id, conforme
+            especificação RFC4122 para geração de identificadores únicos
+            universais. Serve como chave de correlação fundamental para
+            rastreabilidade, auditoria e conciliação de transações entre
+            instituições participantes. Mais informações em Cabeçalhos HTTP na
+            documentação de produtos do Open Finance Brasil
+
+
+            Regras de preenchimento
+
+
+            OBRIGATÓRIO quando o x-fapi-interaction-id foi recebido na
+            requisição ou quando o Server gerou o x-fapi-interaction-id conforme
+            especificação da API de Produto. Falhas de aplicação, validação,
+            autorização, timeout, indisponibilidade de dependências ou erros
+            internos (5xx) NÃO caracterizam, por si só, falha crítica para fins
+            de ausência do x-fapi-interaction-id, desde que a requisição tenha
+            sido recebida pelo Server.
           example: c1ca8e62-9d6f-4ea3-84f2-d66bc0a8f7dc
         portabilityId:
           type: string
@@ -5733,8 +5762,6 @@ components:
               - AWAITING_HANDOFF
               - AWAITING_USER_AUTH
               - AWAITING_REDIRECT_TO_APP
-              - AUTHORISED
-              - REJECTED 
             description: Tipo do fluxo de Hybridflow
           timestamp:
             type: string
@@ -6267,9 +6294,8 @@ components:
             - IMMEDIATE
             - RECURRENT
             - SWEEPING
+            - AUTOMATIC
             - SCHEDULED
-            - WITHDRAW
-            - CHANGE
           example: RECURRENT
         statusReasonCode:
           type: string
@@ -6467,11 +6493,6 @@ components:
               value:
                 message: Bad Request
   securitySchemes:
-    PCMAccessToken:
-      description: Token de acesso JWT para autenticação nas APIs da PCM.
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
     bearer:
       type: http
       scheme: bearer
